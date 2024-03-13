@@ -1,0 +1,1 @@
+hostname = "dev-<APPLICATION-NAME>"

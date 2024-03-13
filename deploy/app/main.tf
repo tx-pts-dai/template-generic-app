@@ -1,0 +1,26 @@
+locals {
+  application_name = "<APPLICATION_NAME>"
+  release_name     = var.environment == "production" ? local.application_name : "${local.application_name}-${var.environment}"
+  image_tag        = var.image_tag == "" ? "latest" : var.image_tag
+  image_repo       = data.terraform_remote_state.infra_local.outputs.ecr_repository_url
+  iam_role_arn     = data.terraform_remote_state.infra_local.outputs.iam_eks_role_arn
+}
+
+resource "helm_release" "this" {
+  name             = local.release_name
+  chart            = "https://github.com/DND-IT/app-helm-chart/archive/refs/tags/v3.5.1.tar.gz"
+  namespace        = local.release_name
+  create_namespace = true
+  atomic           = true
+  cleanup_on_fail  = true
+  wait             = true
+  max_history      = 3
+
+  values = [
+    templatefile("${path.module}/files/values.yaml.tpl", {
+      aws_iam_role_arn = local.iam_role_arn
+      image_repo       = local.image_repo
+      image_tag        = local.image_tag
+    })
+  ]
+}
