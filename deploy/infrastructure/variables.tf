@@ -6,7 +6,7 @@ variable "region" {
 variable "github_repo" {
   description = "Git repository name"
   type        = string
-  default     = "<APPLICATION-NAME>"
+  default     = "<APPLICATION_NAME>"
 }
 
 variable "environment" {

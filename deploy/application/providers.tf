@@ -1,8 +1,12 @@
 terraform {
-  required_version = "~> 1.6.0"
+  required_version = "~> 1.7.0"
+
   backend "s3" {
+    key            = "<GITHUB_REPO>/application.tfstate"
+    region         = "<AWS_REGION>"
     dynamodb_table = "terraform-lock"
   }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -20,9 +24,7 @@ terraform {
 }
 
 provider "aws" {
-  region = var.region
   default_tags {
-    # What are the normal default labels used in other repos?
     tags = {
       "Terraform"   = "true"
       "Environment" = var.environment
@@ -31,11 +33,21 @@ provider "aws" {
   }
 }
 
-data "aws_eks_cluster" "cluster" {
-  name = data.terraform_remote_state.infrastructure.outputs.cluster_name
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
+
+    exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      command     = "aws"
+      # This requires the awscli to be installed locally where Terraform is executed
+      args = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.cluster.id]
+    }
+  }
 }
 
-data "aws_eks_cluster_auth" "cluster" {
+data "aws_eks_cluster" "cluster" {
   name = data.terraform_remote_state.infrastructure.outputs.cluster_name
 }
 
@@ -45,15 +57,7 @@ data "terraform_remote_state" "infrastructure" {
   backend = "s3"
   config = {
     bucket = "tf-state-${data.aws_caller_identity.current.account_id}"
-    key    = "infrastructure/terraform.tfstate"
-  }
-}
-
-provider "helm" {
-  kubernetes {
-    host                   = data.aws_eks_cluster.cluster.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
-    token                  = data.aws_eks_cluster_auth.cluster.token
+    key    = var.terraform_remote_state_key
   }
 }
 
@@ -61,6 +65,6 @@ data "terraform_remote_state" "infra_local" {
   backend = "s3"
   config = {
     bucket = "tf-state-${data.aws_caller_identity.current.account_id}"
-    key    = "${var.github_repo}/infra.tfstate"
+    key    = "${var.github_repo}/infrastructure.tfstate"
   }
 }
