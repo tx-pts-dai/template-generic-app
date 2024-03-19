@@ -12,6 +12,7 @@ To make this template functioning you have to first fill the blanks by replacing
 - `<APPLICATION_NAME>` with the app name
 - `<DEV_ACCOUNT_ID>` and `<PROD_ACCOUNT_ID>` with the respective AWS Account IDs
 - `<GITHUB_REPO>`
+- `<AWS_REGION>`
 
 in the following files:
 

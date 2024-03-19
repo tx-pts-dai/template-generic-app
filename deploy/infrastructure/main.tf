@@ -1,8 +1,7 @@
 locals {
   cluster_name = data.terraform_remote_state.infrastructure.outputs.cluster_name
-  hostname     = var.hostname
-  namespace    = var.environment
-  service_name = var.github_repo
+  namespace    = var.environment # must match the namespace in the ./deploy/application/main.tf 
+  service_name = var.github_repo # or <APPLICATION_NAME> if mono-repo
 }
 
 resource "aws_ecr_repository" "this" {
@@ -23,7 +22,8 @@ module "iam_eks_role" {
     "${local.cluster_name}" = ["${local.namespace}:${local.service_name}"]
   }
 
+  # Create and set additional policies here
   role_policy_arns = {
-    # s3 = aws_iam_policy.this.arn
+    # s3 = aws_iam_policy.read_s3.arn
   }
 }

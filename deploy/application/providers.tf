@@ -65,6 +65,6 @@ data "terraform_remote_state" "infra_local" {
   backend = "s3"
   config = {
     bucket = "tf-state-${data.aws_caller_identity.current.account_id}"
-    key    = "${var.github_repo}/infrastructure.tfstate"
+    key    = "${var.github_repo}/infrastructure.tfstate" # Must match what's defined in `/deploy/infrastructure/providers.tf`
   }
 }

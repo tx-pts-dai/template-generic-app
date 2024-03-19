@@ -63,7 +63,7 @@ jobs:
       aws_role_name: cicd-iac
       aws_account_id: ${{ matrix.config.account_id }}
       tf_dir: deploy/application
-      tf_version: 1.6.6
+      tf_version: 1.7.1
       tf_deploy_override: ${{ matrix.config.tf_deploy_override }}
       tf_state_bucket: tf-state-${{ matrix.config.account_id }}
       tf_var_files: ./environments/${{ matrix.config.environment }}.tfvars

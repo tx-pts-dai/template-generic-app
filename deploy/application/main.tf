@@ -1,8 +1,8 @@
 locals {
   application_name = "<APPLICATION_NAME>"
-  namespace        = var.environment # TODO: To discuss if using the environment name is ok
   release_name     = var.environment == "production" ? local.application_name : "${local.application_name}-${var.environment}"
   cluster_name     = data.aws_eks_cluster.cluster.id
+  namespace        = data.terraform_remote_state.infra_local.outputs.k8s_namespace
   image_repo       = data.terraform_remote_state.infra_local.outputs.ecr_repository_url
   iam_role_arn     = data.terraform_remote_state.infra_local.outputs.iam_eks_role_arn
 }
