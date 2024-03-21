@@ -3,6 +3,12 @@
 aws_iam_role_arn: ${aws_iam_role_arn}
 image_repo: ${image_repo}
 image_tag: ${image_tag}
+
+service:
+  name: ${service_name}
+
+port: 8080
+
 probe:
   liveness: /api/health
   readiness: /api/health

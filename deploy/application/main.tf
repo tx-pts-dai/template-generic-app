@@ -23,6 +23,7 @@ resource "helm_release" "this" {
       cluster_name      = local.cluster_name
       image_repo        = local.image_repo
       image_tag         = var.image_tag
+      service_name      = local.application_name
       hostname          = var.hostname
       provisioner_group = var.provisioner_group
       env_vars          = {}
