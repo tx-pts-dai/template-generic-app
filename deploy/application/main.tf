@@ -9,7 +9,7 @@ locals {
 
 resource "helm_release" "this" {
   name             = local.release_name
-  chart            = "https://github.com/DND-IT/app-helm-chart/archive/refs/tags/v4.1.0.tar.gz"
+  chart            = "https://github.com/DND-IT/app-helm-chart/archive/refs/tags/4.1.0.tar.gz"
   namespace        = local.namespace
   create_namespace = true
   atomic           = true
