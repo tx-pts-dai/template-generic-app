@@ -17,7 +17,7 @@ ingress:
     - ${hostname}
 
 nodeSelector:
-  "provisioner-group": <CLUSTER_NAME>
+  "provisioner-group": ${provisioner_group}
   "kubernetes.io/arch": amd64
 
 tolerations:
