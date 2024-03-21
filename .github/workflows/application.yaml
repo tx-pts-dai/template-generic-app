@@ -24,6 +24,8 @@ permissions:
 jobs:
   build:
     uses: tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml@v0.8.0
+    with:
+      docker_context: application
 
   push:
     needs: [build]
