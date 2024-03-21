@@ -35,6 +35,6 @@ data "terraform_remote_state" "infrastructure" {
   backend = "s3"
   config = {
     bucket = "tf-state-${data.aws_caller_identity.current.account_id}"
-    key    = "infrastructure/terraform.tfstate"
+    key    = var.terraform_remote_state_key
   }
 }

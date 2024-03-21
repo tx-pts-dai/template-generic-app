@@ -3,6 +3,11 @@ variable "environment" {
   type        = string
 }
 
+variable "hostname" {
+  description = "DNS name where to host the application"
+  type        = string
+}
+
 variable "image_tag" {
   description = "The tag of the image to deploy"
   type        = string

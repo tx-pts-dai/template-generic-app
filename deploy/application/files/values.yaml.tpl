@@ -1,4 +1,4 @@
-# https://github.com/DND-IT/app-helm-chart/blob/3.5.1/values.yaml
+# https://github.com/DND-IT/app-helm-chart/blob/4.1.0/values.yaml
 
 aws_iam_role_arn: ${aws_iam_role_arn}
 image_repo: ${image_repo}
@@ -11,6 +11,10 @@ env:
 %{ for key, value in env_vars ~}
   ${key}: ${value}
 %{ endfor ~}
+
+ingress:
+  hosts: 
+    - ${hostname}
 
 nodeSelector:
   "provisioner-group": <CLUSTER_NAME>

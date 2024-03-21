@@ -11,18 +11,20 @@ To make this template functioning you have to first fill the blanks by replacing
 
 - `<APPLICATION_NAME>` with the app name
 - `<DEV_ACCOUNT_ID>` and `<PROD_ACCOUNT_ID>` with the respective AWS Account IDs
+- `<DEV_HOSTNAME>` and `<PROD_HOSTNAME>` with the respective DNS values
 - `<GITHUB_REPO>`
 - `<AWS_REGION>`
-
-in the following files:
-
-- `.github/workflows/*`
-- `deploy/application/providers.tf`
-- `deploy/infrastructure/providers.tf`
 
 Then double check the following inputs:
 
 - `var.terraform_remote_state_key` to point to the right file for your infra.
+
+Then...
+
+1. (Platform team) Update the `infra-terraform` repository to include this repo as allowed to use OIDC
+1. Do a first run to create the infrastructure
+1. Do a second run to deploy the application
+1. Profit (?)
 
 ## Folder structure
 
@@ -34,3 +36,9 @@ A feature we offer is to allow to deploy the application with `helm install` onl
 ## Deployment
 
 This project uses [GitHub Actions](https://docs.github.com/en/actions) to deploy the application and infrastructure. The workflow is defined in `.github/workflows/application.yaml` which uses a reusable workflow that is loaded from `https://github.com/tx-pts-dai/github-workflows`.
+
+## Future works for the Platform engineers
+
+1. Auto-configure (`AWS_REGION`, `AWS_ACCOUNT_ID`, ...) through `repository-generator` or Backstage (?) or custom orchestrator.
+1. Allow for Python/NodeJS and Java templates. Ask developers to provide good ones.
+1. DNS management (potentially `external-dns`)

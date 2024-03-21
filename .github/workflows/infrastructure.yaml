@@ -30,7 +30,7 @@ jobs:
           - environment: dev
             account_id: <DEV_ACCOUNT_ID>
             tf_deploy_override: ${{ github.event_name == 'workflow_dispatch' && true || false }} # Allow manual deployment of Dev
-          # - environment: production
+          # - environment: prod
           #   account_id: <PROD_ACCOUNT_ID>
           #   tf_deploy_override: false
 

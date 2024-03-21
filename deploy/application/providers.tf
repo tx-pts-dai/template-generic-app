@@ -2,7 +2,7 @@ terraform {
   required_version = "~> 1.7.0"
 
   backend "s3" {
-    key            = "<GITHUB_REPO>/application.tfstate"
+    key            = "<GITHUB_REPO>/<APPLICATION_NAME>.tfstate"
     region         = "<AWS_REGION>"
     dynamodb_table = "terraform-lock"
   }

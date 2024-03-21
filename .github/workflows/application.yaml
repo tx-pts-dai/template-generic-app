@@ -33,13 +33,13 @@ jobs:
         config:
           - environment: dev
             account_id: <DEV_ACCOUNT_ID>
-          # - environment: production
+          # - environment: prod
           #   account_id: <PROD_ACCOUNT_ID>
 
     uses: tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml@v0.8.0
     with:
       environment: ${{ matrix.config.environment }}
-      aws_region: eu-central-1 # TODO: Test moving region and role_name to configuration variables and think about the `repository-generator` for setting these values automatically
+      aws_region: eu-central-1
       aws_role_name: cicd-iac
       aws_account_id: ${{ matrix.config.account_id }}
 
@@ -51,8 +51,8 @@ jobs:
         config:
           - environment: dev
             account_id: <DEV_ACCOUNT_ID>
-            tf_deploy_override: ${{ github.event_name == 'workflow_dispatch' && true || false }} # Allow manual deployment of Dev
-          # - environment: production
+            tf_deploy_override: ${{ github.event_name == 'workflow_dispatch' && true || false }}
+          # - environment: prod
           #   account_id: <PROD_ACCOUNT_ID>
           #   tf_deploy_override: false
 
