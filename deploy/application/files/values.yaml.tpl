@@ -13,6 +13,12 @@ env:
 %{ endfor ~}
 
 ingress:
+  className: alb
+  annotations:
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:232276890999:certificate/9a6cae93-223e-4b3d-b6de-4f26a097da49
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
+    alb.ingress.kubernetes.io/target-type: ip
   hosts: 
     - ${hostname}
 

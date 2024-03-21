@@ -1,1 +1,0 @@
-hostname = "<APPLICATION_NAME>"

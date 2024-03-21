@@ -1,1 +1,1 @@
-hostname = "dev-<APPLICATION_NAME>"
+environment = "dev"
