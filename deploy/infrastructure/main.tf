@@ -1,7 +1,7 @@
 locals {
   cluster_name = data.terraform_remote_state.infrastructure.outputs.cluster_name
   namespace    = var.environment # must match the namespace in the ./deploy/application/main.tf 
-  service_name = var.github_repo # or <APPLICATION_NAME> if mono-repo
+  service_name = "<APPLICATION_NAME>"
 }
 
 resource "aws_ecr_repository" "this" {
