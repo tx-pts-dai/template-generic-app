@@ -40,9 +40,9 @@ This project uses [GitHub Actions](https://docs.github.com/en/actions) to deploy
 
 ## Future works for the Platform engineers
 
-1. Auto-configure (`AWS_REGION`, `AWS_ACCOUNT_ID`, ...) through `repository-generator` or Backstage (?) or custom orchestrator.
+1. Auto-configure (`AWS_REGION`, `AWS_ACCOUNT_ID`, precommit, clone the repo, ...) through cli tool (wip)
 1. Create ACM certificate automatically + DNS validation (module?) through CloudFlare or Route53 + injection into the service annotations
-1. Custom Python/NodeJS/Java templates. (Ask developers to provide good/standard ones?)
+1. Custom Python/NodeJS/Java templates. (Ask developers to provide good/standard ones? Include generation of GitIgnore too)
 1. Implement scripts for [Localstack](https://www.localstack.cloud/), [Kind](https://kind.sigs.k8s.io/) and [Act](https://github.com/nektos/act) to complete local dev experience
 
 ## Requirements
