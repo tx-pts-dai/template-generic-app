@@ -42,7 +42,6 @@ This project uses [GitHub Actions](https://docs.github.com/en/actions) to deploy
 
 1. Auto-configure (`AWS_REGION`, `AWS_ACCOUNT_ID`, ...) through `repository-generator` or Backstage (?) or custom orchestrator.
 1. Create ACM certificate automatically
-1. Build an init script that replaces occurrences for you (Create a central CLI for DAI?)
 1. Custom Python/NodeJS/Java templates. (Ask developers to provide good/standard ones?)
 1. DNS management (potentially `external-dns`, set it as requirement for the foundational infrastructure)
 1. Implement scripts for [Localstack](https://www.localstack.cloud/), [Kind](https://kind.sigs.k8s.io/) and [Act](https://github.com/nektos/act) to complete local dev experience
@@ -53,3 +52,4 @@ Foundational infrastructure must have:
 
 - external-dns
 - AWS Load Balancer controller
+- ... (growing list) ...

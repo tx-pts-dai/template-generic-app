@@ -10,8 +10,8 @@ service:
 port: 8080
 
 probe:
-  liveness: /api/health
-  readiness: /api/health
+  liveness: <APP_HEALTHCHECK_ENDPOINT>
+  readiness: <APP_HEALTHCHECK_ENDPOINT>
 
 env:
 %{ for key, value in env_vars ~}
