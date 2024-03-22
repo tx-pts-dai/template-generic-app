@@ -20,6 +20,8 @@ terraform {
 }
 
 provider "aws" {
+  region = "<AWS_REGION>"
+
   default_tags {
     tags = {
       "Terraform"   = "true"
