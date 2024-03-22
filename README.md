@@ -18,6 +18,7 @@ To make this template functioning you have to first fill the blanks by replacing
 Then double check the following inputs:
 
 - `var.terraform_remote_state_key` to point to the right file for your infra.
+- `var.provisioner_group` to use the right provisioner group based on the ones available.
 
 Then...
 
@@ -40,6 +41,8 @@ This project uses [GitHub Actions](https://docs.github.com/en/actions) to deploy
 ## Future works for the Platform engineers
 
 1. Auto-configure (`AWS_REGION`, `AWS_ACCOUNT_ID`, ...) through `repository-generator` or Backstage (?) or custom orchestrator.
+1. Create ACM certificate automatically
+1. Build an init script that replaces occurrences for you (Create a central CLI for DAI?)
 1. Custom Python/NodeJS/Java templates. (Ask developers to provide good/standard ones?)
 1. DNS management (potentially `external-dns`, set it as requirement for the foundational infrastructure)
 1. Implement scripts for [Localstack](https://www.localstack.cloud/), [Kind](https://kind.sigs.k8s.io/) and [Act](https://github.com/nektos/act) to complete local dev experience

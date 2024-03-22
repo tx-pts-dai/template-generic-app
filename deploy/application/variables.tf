@@ -23,7 +23,7 @@ variable "github_repo" {
 variable "provisioner_group" {
   description = "Name of the provisioner group to use"
   type        = string
-  default     = "default"
+  default     = "<PROVISIONER_GROUP>"
 }
 
 variable "terraform_remote_state_key" {

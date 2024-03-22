@@ -37,7 +37,7 @@ jobs:
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-deploy-basic.yaml@v0.8.0
     with:
       environment: ${{ matrix.config.environment }}
-      aws_region: eu-central-1
+      aws_region: <AWS_REGION>
       aws_role_name: cicd-iac
       aws_account_id: ${{ matrix.config.account_id }}
       tf_dir: deploy/infrastructure
