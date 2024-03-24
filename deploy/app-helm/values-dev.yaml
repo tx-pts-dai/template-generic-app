@@ -1,4 +1,0 @@
-service:
-  name: <APPLICATION-NAME>
-
-image_repo: <ECR_REPOSITORY_URL>

@@ -1,0 +1,73 @@
+name: Application
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "deploy/application/**"
+      - ".github/workflows/application.yaml"
+
+  pull_request:
+    branches: [main]
+    paths:
+      - "deploy/application/**"
+      - ".github/workflows/application.yaml"
+
+  # TODO: test it
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  build:
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml@v0.8.0
+    with:
+      docker_context: application
+
+  push:
+    needs: [build]
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - environment: dev
+            account_id: <DEV_ACCOUNT_ID>
+          # - environment: prod
+          #   account_id: <PROD_ACCOUNT_ID>
+
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml@v0.8.0
+    with:
+      environment: ${{ matrix.config.environment }}
+      aws_region: <AWS_REGION>
+      aws_role_name: cicd-iac
+      aws_account_id: ${{ matrix.config.account_id }}
+
+  deploy_tf:
+    needs: [push]
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - environment: dev
+            account_id: <DEV_ACCOUNT_ID>
+            tf_deploy_override: ${{ github.event_name == 'workflow_dispatch' && true || false }}
+          # - environment: prod
+          #   account_id: <PROD_ACCOUNT_ID>
+          #   tf_deploy_override: false
+
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-deploy-basic.yaml@v0.8.0
+    with:
+      environment: ${{ matrix.config.environment }}
+      aws_region: <AWS_REGION>
+      aws_role_name: cicd-iac
+      aws_account_id: ${{ matrix.config.account_id }}
+      tf_dir: deploy/application
+      tf_version: 1.7.1
+      tf_deploy_override: ${{ matrix.config.tf_deploy_override }}
+      tf_state_bucket: tf-state-${{ matrix.config.account_id }}
+      tf_var_files: ./environments/${{ matrix.config.environment }}.tfvars
+      tf_vars: |
+        image_tag=${{ github.sha }}

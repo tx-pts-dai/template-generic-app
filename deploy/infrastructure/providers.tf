@@ -1,7 +1,9 @@
 terraform {
-  required_version = "~> 1.6.0"
+  required_version = "~> 1.7.0"
 
   backend "s3" {
+    key            = "<GITHUB_REPO>/infrastructure.tfstate"
+    region         = "<AWS_REGION>"
     dynamodb_table = "terraform-lock"
   }
 
@@ -18,7 +20,8 @@ terraform {
 }
 
 provider "aws" {
-  region = var.region
+  region = "<AWS_REGION>"
+
   default_tags {
     tags = {
       "Terraform"   = "true"
@@ -26,26 +29,6 @@ provider "aws" {
       "Repository"  = var.github_repo
     }
   }
-}
-
-provider "aws" {
-  region = "us-east-1"
-  alias  = "us-east-1"
-  default_tags {
-    tags = {
-      "Terraform"   = "true"
-      "Environment" = var.environment
-      "Repository"  = var.github_repo
-    }
-  }
-}
-
-data "aws_secretsmanager_secret_version" "cloudflare_api_token" {
-  secret_id = "tf_cloudflare_api_token"
-}
-
-provider "cloudflare" {
-  api_token = data.aws_secretsmanager_secret_version.cloudflare_api_token.secret_string
 }
 
 data "aws_caller_identity" "current" {}
@@ -54,6 +37,6 @@ data "terraform_remote_state" "infrastructure" {
   backend = "s3"
   config = {
     bucket = "tf-state-${data.aws_caller_identity.current.account_id}"
-    key    = "infrastructure/terraform.tfstate"
+    key    = var.terraform_remote_state_key
   }
 }
