@@ -6,7 +6,7 @@ locals {
 
 resource "aws_ecr_repository" "this" {
   name                 = var.github_repo
-  image_tag_mutability = "IMMUTABLE"
+  image_tag_mutability = "MUTABLE"
 
   force_delete = true
 }
