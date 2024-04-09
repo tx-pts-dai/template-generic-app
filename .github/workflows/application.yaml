@@ -23,12 +23,6 @@ permissions:
 
 jobs:
   build:
-    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml@v0.8.0
-    with:
-      docker_context: application
-
-  push:
-    needs: [build]
     strategy:
       fail-fast: false
       matrix:
@@ -38,15 +32,16 @@ jobs:
           # - environment: prod
           #   account_id: <PROD_ACCOUNT_ID>
 
-    uses: tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml@v0.8.0
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.9.0
     with:
       environment: ${{ matrix.config.environment }}
       aws_region: <AWS_REGION>
       aws_role_name: cicd-iac
       aws_account_id: ${{ matrix.config.account_id }}
+      docker_context: application
 
   deploy_tf:
-    needs: [push]
+    needs: [build]
     strategy:
       fail-fast: false
       matrix:
