@@ -32,7 +32,7 @@ jobs:
           # - environment: prod
           #   account_id: <PROD_ACCOUNT_ID>
 
-    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.8.0
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.9.0
     with:
       environment: ${{ matrix.config.environment }}
       aws_region: <AWS_REGION>
