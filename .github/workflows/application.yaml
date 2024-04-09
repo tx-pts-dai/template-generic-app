@@ -39,7 +39,6 @@ jobs:
       aws_role_name: cicd-iac
       aws_account_id: ${{ matrix.config.account_id }}
       docker_context: application
-      image_tag: ${{ !contains(github.head_ref, '/') && github.head_ref || '' }}
 
   deploy_tf:
     needs: [build]
