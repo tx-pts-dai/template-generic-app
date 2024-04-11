@@ -4,12 +4,14 @@ on:
   push:
     branches: [main]
     paths:
+      - "application/**"
       - "deploy/application/**"
       - ".github/workflows/application.yaml"
 
   pull_request:
     branches: [main]
     paths:
+      - "application/**"
       - "deploy/application/**"
       - ".github/workflows/application.yaml"
 
