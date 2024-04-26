@@ -6,7 +6,7 @@ locals {
   image_repo       = data.terraform_remote_state.infra_local.outputs.ecr_repository_url
   iam_role_arn     = data.terraform_remote_state.infra_local.outputs.iam_eks_role_arn
   # downscale by default in `dev` environment over night and during the weekend
-  downscaler_annotations = var.environment == "dev" ? {
+  downscaler_annotations = var.environment != "prod" ? {
     "downscaler/downscale-period" = "Mon-Fri 22:00-22:01 Europe/Zurich"
     "downscaler/upscale-period"   = "Mon-Fri 05:00-05:01 Europe/Zurich"
   } : {}
