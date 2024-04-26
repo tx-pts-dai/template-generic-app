@@ -1,10 +1,15 @@
 locals {
   application_name = "<APPLICATION_NAME>"
-  release_name     = var.environment == "production" ? local.application_name : "${local.application_name}-${var.environment}"
+  release_name     = var.environment == "prod" ? local.application_name : "${local.application_name}-${var.environment}"
   cluster_name     = data.aws_eks_cluster.cluster.id
   namespace        = data.terraform_remote_state.infra_local.outputs.k8s_namespace
   image_repo       = data.terraform_remote_state.infra_local.outputs.ecr_repository_url
   iam_role_arn     = data.terraform_remote_state.infra_local.outputs.iam_eks_role_arn
+  # downscale by default in `dev` environment over night and during the weekend
+  downscaler_annotations = var.environment == "dev" ? {
+    "downscaler/downscale-period" = "Mon-Fri 22:00-22:01 Europe/Zurich"
+    "downscaler/upscale-period"   = "Mon-Fri 05:00-05:01 Europe/Zurich"
+  } : {}
 }
 
 resource "helm_release" "this" {
@@ -19,14 +24,15 @@ resource "helm_release" "this" {
 
   values = [
     templatefile("${path.module}/files/values.yaml.tpl", {
-      aws_iam_role_arn  = local.iam_role_arn
-      cluster_name      = local.cluster_name
-      image_repo        = local.image_repo
-      image_tag         = var.image_tag
-      service_name      = local.application_name
-      hostname          = var.hostname
-      provisioner_group = var.provisioner_group
-      env_vars          = {}
+      aws_iam_role_arn       = local.iam_role_arn
+      cluster_name           = local.cluster_name
+      image_repo             = local.image_repo
+      image_tag              = var.image_tag
+      service_name           = local.application_name
+      hostname               = var.hostname
+      provisioner_group      = var.provisioner_group
+      deployment_annotations = local.downscaler_annotations
+      env_vars               = {}
     })
   ]
 }
