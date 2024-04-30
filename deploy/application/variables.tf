@@ -31,3 +31,9 @@ variable "terraform_remote_state_key" {
   type        = string
   default     = "infrastructure/terraform.tfstate"
 }
+
+variable "deployment_annotations" {
+  description = "Annotations to add to the Kubernetes Deployment"
+  type        = map(string)
+  default     = {}
+}

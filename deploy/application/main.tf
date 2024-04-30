@@ -6,10 +6,6 @@ locals {
   image_repo       = data.terraform_remote_state.infra_local.outputs.ecr_repository_url
   iam_role_arn     = data.terraform_remote_state.infra_local.outputs.iam_eks_role_arn
   # downscale by default in `dev` environment over night and during the weekend
-  downscaler_annotations = var.environment != "prod" ? {
-    "downscaler/downscale-period" = "Mon-Fri 22:00-22:01 Europe/Zurich"
-    "downscaler/upscale-period"   = "Mon-Fri 05:00-05:01 Europe/Zurich"
-  } : {}
 }
 
 resource "helm_release" "this" {
@@ -31,7 +27,7 @@ resource "helm_release" "this" {
       service_name           = local.application_name
       hostname               = var.hostname
       provisioner_group      = var.provisioner_group
-      deployment_annotations = local.downscaler_annotations
+      deployment_annotations = var.deployment_annotations
       env_vars               = {}
     })
   ]
