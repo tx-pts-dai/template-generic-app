@@ -9,6 +9,12 @@ service:
 
 port: 8080
 
+metadata:
+  deploymentAnnotations: 
+    %{ for key, value in deployment_annotations ~}
+      ${key}: ${value}
+    %{ endfor ~}
+
 probe:
   liveness: <APP_HEALTHCHECK_ENDPOINT>
   readiness: <APP_HEALTHCHECK_ENDPOINT>
