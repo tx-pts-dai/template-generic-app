@@ -27,3 +27,19 @@ module "iam_eks_role" {
     # s3 = aws_iam_policy.read_s3.arn
   }
 }
+
+# Created in the platform by default. Overridable
+data "aws_route53_zone" "this" {
+  name = var.dns_zone_domain
+}
+
+# Certificate is picked automatically by the ALB Controller through auto-discovery
+module "acm" {
+  source  = "terraform-aws-modules/acm/aws"
+  version = "~> 4.0"
+
+  domain_name = var.hostname
+  zone_id     = aws_route53_zone.this.zone_id
+
+  validation_method = "DNS"
+}

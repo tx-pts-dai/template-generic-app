@@ -27,11 +27,11 @@ env:
 ingress:
   className: alb
   annotations:
-    # TODO: auto-creation of certificate and DNS record
-    # alb.ingress.kubernetes.io/certificate-arn: <CERTIFICATE_ARN>
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
     alb.ingress.kubernetes.io/target-type: ip
+    external-dns.alpha.kubernetes.io/hostname: ${hostname}
   hosts: 
     - ${hostname}
 
