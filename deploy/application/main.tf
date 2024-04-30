@@ -5,7 +5,6 @@ locals {
   namespace        = data.terraform_remote_state.infra_local.outputs.k8s_namespace
   image_repo       = data.terraform_remote_state.infra_local.outputs.ecr_repository_url
   iam_role_arn     = data.terraform_remote_state.infra_local.outputs.iam_eks_role_arn
-  # downscale by default in `dev` environment over night and during the weekend
 }
 
 resource "helm_release" "this" {
