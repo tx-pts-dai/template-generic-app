@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: $MATRIX
+        environment: <MATRIX>
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.16.0
     with:
       environment: ${{ matrix.environment }}
