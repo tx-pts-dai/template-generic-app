@@ -1,4 +1,4 @@
-name: Infrastructure
+name: Deploy Terraform Infrastructure
 
 on:
   push:
@@ -13,7 +13,6 @@ on:
       - "deploy/infrastructure/**"
       - ".github/workflows/infrastructure.yaml"
 
-  # TODO: test it
   workflow_dispatch:
 
 permissions:
@@ -22,26 +21,22 @@ permissions:
   pull-requests: write
 
 jobs:
-  terraform:
+  plan:
+    if: github.event_name == 'pull_request'
     strategy:
       fail-fast: false
       matrix:
-        config:
-          - environment: dev
-            account_id: <DEV_ACCOUNT_ID>
-            tf_deploy_override: ${{ github.event_name == 'workflow_dispatch' && true || false }} # Allow manual deployment of Dev
-          # - environment: prod
-          #   account_id: <PROD_ACCOUNT_ID>
-          #   tf_deploy_override: false
-
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-deploy-basic.yaml@v0.8.0
+        environment: <MATRIX>
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.16.0
     with:
-      environment: ${{ matrix.config.environment }}
-      aws_region: <AWS_REGION>
-      aws_role_name: cicd-iac
-      aws_account_id: ${{ matrix.config.account_id }}
-      tf_dir: deploy/infrastructure
-      tf_version: 1.7.1
-      tf_deploy_override: ${{ matrix.config.tf_deploy_override }}
-      tf_state_bucket: tf-state-${{ matrix.config.account_id }}
-      tf_var_files: ./environments/${{ matrix.config.environment }}.tfvars
+      environment: ${{ matrix.environment }}
+
+  apply:
+    if: github.ref_name == github.event.repository.default_branch && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: $MATRIX
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.16.0
+    with:
+      environment: ${{ matrix.environment }}
