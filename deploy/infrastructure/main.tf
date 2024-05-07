@@ -39,7 +39,7 @@ module "acm" {
   version = "~> 4.0"
 
   domain_name = var.hostname
-  zone_id     = aws_route53_zone.this.zone_id
+  zone_id     = data.aws_route53_zone.this.zone_id
 
   validation_method = "DNS"
 }
