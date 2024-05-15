@@ -31,3 +31,11 @@ resource "helm_release" "this" {
     })
   ]
 }
+
+data "aws_ssm_parameter" "cluster_name" {
+  name = "kubernetes-platform-cluster-name"
+}
+
+data "aws_eks_cluster" "eks_cluster" {
+  name = data.aws_ssm_parameter.cluster_name.value
+}
