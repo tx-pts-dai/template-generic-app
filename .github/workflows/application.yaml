@@ -46,20 +46,6 @@ jobs:
       image_name: ${{ github.event.repository.name }}
       image_tag: ${{ github.sha }}
 
-  deploy_app:
-    strategy:
-      fail-fast: false
-      matrix:
-        environment: [dev, production]
-    uses: tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml@v0.16.0
-    with:
-      environment: ${{ matrix.environment.environment }}
-      aws_region: <AWS_REGION>
-      aws_role_name: cicd-iac
-      aws_account_id: ${{ matrix.environment.account_id }}
-      image_name: ${{ github.event.repository.name }}
-      image_tag: ${{ github.sha }}
-
   plan:
     if: github.event_name == 'pull_request'
     strategy:
