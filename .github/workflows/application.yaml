@@ -55,7 +55,14 @@ jobs:
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.16.0
     with:
       environment: ${{ matrix.environment }}
-
+      aws_account_id: ${{ matrix.environment.account_id }}
+      aws_region: <AWS_REGION>
+      aws_role_name: cicd-iac
+      aws_oidc_role_arn: arn:xxx
+      tf_dir: deploy/application
+      tf_backend_configs: bucket=tf-state-269132892972 key=XXXX
+      tf_var_files: deploy/application/environments/${{ matrix.environment }}.tfvars
+        
   apply:
     if: github.ref_name == github.event.repository.default_branch && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     strategy:
@@ -65,3 +72,10 @@ jobs:
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.16.0
     with:
       environment: ${{ matrix.environment }}
+      aws_account_id: ${{ matrix.environment.account_id }}
+      aws_region: <AWS_REGION>
+      aws_role_name: cicd-iac
+      aws_oidc_role_arn: arn:xxx
+      tf_dir: deploy/application
+      tf_backend_configs: bucket=tf-state-269132892972 key=XXXXX
+      tf_var_files: deploy/application/environments/${{ matrix.environment }}.tfvars
