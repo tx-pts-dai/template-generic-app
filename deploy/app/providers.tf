@@ -2,9 +2,10 @@ terraform {
   required_version = "~> 1.7.0"
 
   backend "s3" {
-    key            = "<GITHUB_REPO>/application.tfstate"
-    region         = "<AWS_REGION>"
+    # key            = "@@github_repo@@/app/@@environment@@.tfstate"
+    region         = "@@region@@"
     dynamodb_table = "terraform-lock"
+    encrypt        = true
   }
 
   required_providers {
@@ -24,14 +25,14 @@ terraform {
 }
 
 provider "aws" {
-  region = "<AWS_REGION>"
+  region = var.region
 
   default_tags {
-    tags = {
-      "Terraform"   = "true"
-      "Environment" = var.environment
-      "Repository"  = var.github_repo
-    }
+    tags = merge(
+      {
+        Terraform = "true"
+      },
+    var.tags)
   }
 }
 
@@ -49,10 +50,6 @@ provider "helm" {
   }
 }
 
-data "aws_eks_cluster" "cluster" {
-  name = data.terraform_remote_state.infrastructure.outputs.cluster_name
-}
-
 data "aws_caller_identity" "current" {}
 
 data "terraform_remote_state" "infrastructure" {
@@ -67,6 +64,6 @@ data "terraform_remote_state" "infra_local" {
   backend = "s3"
   config = {
     bucket = "tf-state-${data.aws_caller_identity.current.account_id}"
-    key    = "${var.github_repo}/infrastructure.tfstate" # Must match what's defined in `/deploy/infrastructure/providers.tf`
+    key    = "${var.github_repo}/infra.tfstate" # Must match what's defined in `/deploy/infrastructure/providers.tf`
   }
 }

@@ -1,6 +1,22 @@
-variable "environment" {
-  description = "value of the environment tag"
+variable "region" {
+  description = "The region to deploy the platform"
   type        = string
+}
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+}
+
+variable "environment" {
+  description = "The environment to deploy the platform"
+  type        = string
+}
+
+variable "namespace" {
+  description = "Kubernetes namespace to deploy the application to"
+  type        = string
+  default     = ""
 }
 
 variable "hostname" {
@@ -29,7 +45,6 @@ variable "provisioner_group" {
 variable "terraform_remote_state_key" {
   description = "Path to the Terraform state file of the upstream infrastructure. Needed until we have a standard path across all AWS accounts."
   type        = string
-  default     = "infrastructure/terraform.tfstate"
 }
 
 variable "deployment_annotations" {
