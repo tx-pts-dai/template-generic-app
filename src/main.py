@@ -10,5 +10,3 @@ def hello_world():
 def healthcheck():
     return "Alive"
 
-if __name__ == "__main__":
-    app.run()

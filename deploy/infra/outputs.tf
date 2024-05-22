@@ -8,7 +8,7 @@ output "iam_eks_role_arn" {
   value       = module.iam_eks_role.iam_role_arn
 }
 
-output "k8s_namespace" {
+output "namespace" {
   description = "Kubernetes namespace where the IRSA account can be run"
   value       = local.namespace
 }
