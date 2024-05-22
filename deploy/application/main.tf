@@ -5,11 +5,9 @@ locals {
   namespace        = data.terraform_remote_state.infra_local.outputs.k8s_namespace
   image_repo       = data.terraform_remote_state.infra_local.outputs.ecr_repository_url
   iam_role_arn     = data.terraform_remote_state.infra_local.outputs.iam_eks_role_arn
-  names            = [for p in data.aws_ssm_parameters_by_path.example.parameters : p.name]
-  values           = [for p in data.aws_ssm_parameters_by_path.example.parameters : p.value]
-  matching_index   = [for idx, name in local.names : idx if can(regex("^.*/name$", name))] 
+  matching_index   = [for idx, name in data.aws_ssm_parameters_by_path.platform.names : idx if can(regex("^.*/name$", name))] 
   first_index      = element(local.matching_index, 0)
-  first_match      = element(local.values, local.first_name_index)
+  first_match      = element(data.aws_ssm_parameters_by_path.platform.values, local.first_index)
 }
 
 resource "helm_release" "this" {
