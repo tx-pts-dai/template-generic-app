@@ -66,7 +66,7 @@ spec:
         values:
           component_id: ${{ parameters.component_id }}
           description: ${{ parameters.description }}
-          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          destination: ${{ parameters.repoUrl }}
           owner: ${{ parameters.owner }}
 
     # action: publish:github:pull-request # https://roadie.io/docs/scaffolder/writing-templates/#publishgithubpull-request to onboard existing services
