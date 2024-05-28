@@ -50,7 +50,7 @@ jobs:
         config:
           - environment: dev
             account_id: <DEV_ACCOUNT_ID>
-            tf_deploy_override: ${{ github.event_name == 'workflow_dispatch' && true || false }}
+            tf_deploy_override: {% raw %}${{ github.event_name == 'workflow_dispatch' && true || false }}{% endraw %}
           # - environment: prod
           #   account_id: <PROD_ACCOUNT_ID>
           #   tf_deploy_override: false
