@@ -51,8 +51,8 @@ spec:
             allowedHosts:
               - github.com
             allowedOwners:
-              - tx-pts-dai
               - DND-IT
+              - tx-pts-dai
   steps:
     # TODO: Replace *all* the placeholders in the template with the values provided by the user.
     - id: template
