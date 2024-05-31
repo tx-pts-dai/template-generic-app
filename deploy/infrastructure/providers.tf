@@ -33,10 +33,3 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-data "terraform_remote_state" "infrastructure" {
-  backend = "s3"
-  config = {
-    bucket = "tf-state-${data.aws_caller_identity.current.account_id}"
-    key    = var.terraform_remote_state_key
-  }
-}
