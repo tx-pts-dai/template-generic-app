@@ -1,9 +1,9 @@
 locals {
-  namespace    = var.environment # must match the namespace in the ./deploy/application/main.tf 
-  service_name = "<APPLICATION_NAME>"
-  matching_index   = [for idx, name in data.aws_ssm_parameters_by_path.platform.names : idx if can(regex("^.*/cluster_name$", name))] 
-  first_index      = element(local.matching_index, 0)
-  cluster_name     = element(data.aws_ssm_parameters_by_path.platform.values, local.first_index)
+  namespace      = var.environment # must match the namespace in the ./deploy/application/main.tf 
+  service_name   = "<APPLICATION_NAME>"
+  matching_index = [for idx, name in data.aws_ssm_parameters_by_path.platform.names : idx if can(regex("^.*/cluster_name$", name))] 
+  first_index    = element(local.matching_index, 0)
+  cluster_name   = element(data.aws_ssm_parameters_by_path.platform.values, local.first_index)
 }
 
 resource "aws_ecr_repository" "this" {
