@@ -20,6 +20,12 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.0"
     }
+    {% if dns_provider == "cloudflare" %}
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 4.0"
+    }
+    {% endif %}
   }
 }
 
@@ -34,6 +40,16 @@ provider "aws" {
     }
   }
 }
+
+{% if dns_provider == "cloudflare" %}
+data "aws_secretsmanager_secret_version" "cloudflare_api_token" {
+  secret_id = "tf_cloudflare_api_token" # follows naming of existing secret in Disco
+}
+
+provider "cloudflare" {
+  api_token = data.aws_secretsmanager_secret_version.cloudflare_api_token.secret_string
+}
+{% endif %}
 
 provider "helm" {
   kubernetes {
