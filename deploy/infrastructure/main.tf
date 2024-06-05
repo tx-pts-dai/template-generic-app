@@ -1,7 +1,7 @@
 locals {
   cluster_name = data.terraform_remote_state.infrastructure.outputs.cluster_name
   namespace    = var.environment # must match the namespace in the ./deploy/application/main.tf 
-  service_name = "<APPLICATION_NAME>"
+  service_name = "{{ application_name }}"
 }
 
 resource "aws_ecr_repository" "this" {

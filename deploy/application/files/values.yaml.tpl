@@ -16,8 +16,8 @@ metadata:
     %{ endfor ~}
 
 probe:
-  liveness: <APP_HEALTHCHECK_ENDPOINT>
-  readiness: <APP_HEALTHCHECK_ENDPOINT>
+  liveness: {{ app_healthcheck_endpoint }}
+  readiness: {{ app_healthcheck_endpoint }}
 
 env:
 %{ for key, value in env_vars ~}

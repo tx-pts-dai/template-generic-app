@@ -1,6 +1,12 @@
-# <APPLICATION_NAME>
+# {{ application_name }}
 
-This template can be used for a single service or for a mono-repo (multi-service) setup. To convert it to a mono-repo:
+This Jinja2 template can be used for a single service or for a mono-repo (multi-service) setup.
+
+It expects the following Jinja2 variables:
+
+- `dns_provider` (accepts values "aws" or "cloudflare")
+
+To convert it to a mono-repo:
 
 1. duplicate `application/` folder
 1. duplicate `.github/workflows/application.yaml` file for enabling the CI
@@ -9,11 +15,11 @@ This template can be used for a single service or for a mono-repo (multi-service
 
 To make this template functioning you have to first fill the blanks by replacing all the occurrences of:
 
-- `<APPLICATION_NAME>` with the app name
-- `<DEV_ACCOUNT_ID>` and `<PROD_ACCOUNT_ID>` with the respective AWS Account IDs
-- `<DEV_HOSTNAME>` and `<PROD_HOSTNAME>` with the respective DNS values
-- `<GITHUB_REPO>`
-- `<AWS_REGION>`
+- `{{ application_name }}` with the app name
+- `{{ dev_account_id }}` and `{{ prod_account_id }}` with the respective AWS Account IDs
+- `{{ dev_hostname }}` and `{{ prod_hostname }}` with the respective DNS values
+- `{{ github_repo }}`
+- `{{ aws_region }}`
 
 Then double check the following inputs:
 
