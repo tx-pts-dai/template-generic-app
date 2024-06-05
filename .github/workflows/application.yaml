@@ -32,7 +32,7 @@ jobs:
           {% for env in matrix_envs -%}
           - environment: j2{{ env.name }}
             account_id: j2{{ env.aws_account_id }}
-          {%- endfor %}
+          {% endfor %}
 
     uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.9.0
     with:
@@ -52,7 +52,7 @@ jobs:
           - environment: j2{{ env.name }}
             account_id: j2{{ env.aws_account_id }}
             tf_deploy_override: j2{{ env.tf_deploy_override }}
-          {%- endfor %}
+          {% endfor %}
 
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-deploy-basic.yaml@v0.8.0
     with:

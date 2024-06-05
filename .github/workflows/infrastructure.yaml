@@ -28,8 +28,8 @@ jobs:
       matrix:
         environment: 
           {% for env in matrix_envs -%}
-          -j2{{ env.name }}
-          {%- endfor %}
+          - j2{{ env.name }}
+          {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.16.0
     with:
       environment: ${{ matrix.environment }}
@@ -41,8 +41,8 @@ jobs:
       matrix:
         environment:
           {% for env in matrix_envs -%}
-          -j2{{ env.name }}
-          {%- endfor %}
+          - j2{{ env.name }}
+          {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.16.0
     with:
       environment: ${{ matrix.environment }}
