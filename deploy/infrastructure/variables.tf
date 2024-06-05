@@ -6,7 +6,7 @@ variable "environment" {
 variable "github_repo" {
   description = "Git repository name"
   type        = string
-  default     = "j2{{ github_repo }}"
+  default     = "@{{ github_repo }}"
 }
 
 variable "hostname" {

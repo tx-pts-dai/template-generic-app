@@ -1,7 +1,7 @@
 locals {
   cluster_name = data.terraform_remote_state.infrastructure.outputs.cluster_name
   namespace    = var.environment # must match the namespace in the ./deploy/application/main.tf 
-  service_name = "j2{{ application_name }}"
+  service_name = "@{{ application_name }}"
 }
 
 resource "aws_ecr_repository" "this" {
@@ -47,19 +47,18 @@ module "acm" {
 
   domain_name = var.hostname
 
-  {% if dns_provider == "aws" %}
+  {%- if dns_provider == "aws" %}
   zone_id     = data.aws_route53_zone.this.zone_id
 
-  {% elif dns_provider == "cloudflare" %}
+  {%- elif dns_provider == "cloudflare" %}
   create_route53_records = false
   validation_record_fqdns = cloudflare_record.validation[*].hostname
-
-  {% endif %}
+  {%- endif %}
 
   validation_method = "DNS"
 }
 
-{% if dns_provider == "cloudflare" %}
+{%- if dns_provider == "cloudflare" %}
 resource "cloudflare_record" "validation" {
   count = length(module.acm.distinct_domain_names)
 

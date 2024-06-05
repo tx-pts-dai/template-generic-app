@@ -2,8 +2,8 @@ terraform {
   required_version = "~> 1.7.0"
 
   backend "s3" {
-    key            = "j2{{ github_repo }}/infrastructure.tfstate"
-    region         = "j2{{ aws_region }}"
+    key            = "@{{ github_repo }}/infrastructure.tfstate"
+    region         = "@{{ aws_region }}"
     dynamodb_table = "terraform-lock"
   }
 
@@ -20,7 +20,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "j2{{ aws_region }}"
+  region = "@{{ aws_region }}"
 
   default_tags {
     tags = {
