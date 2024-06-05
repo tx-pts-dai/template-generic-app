@@ -17,13 +17,13 @@ variable "image_tag" {
 variable "github_repo" {
   description = "Git repository name"
   type        = string
-  default     = "{{ github_repo }}"
+  default     = "j2{{ github_repo }}"
 }
 
 variable "provisioner_group" {
   description = "Name of the provisioner group to use"
   type        = string
-  default     = "{{ provisioner_group }}"
+  default     = "j2{{ provisioner_group }}"
 }
 
 variable "terraform_remote_state_key" {

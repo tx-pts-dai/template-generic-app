@@ -1,4 +1,4 @@
-# {{ application_name }}
+# j2{{ application_name }}
 
 This Jinja2 template can be used for a single service or for a mono-repo (multi-service) setup.
 

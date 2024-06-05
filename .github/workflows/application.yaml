@@ -30,14 +30,14 @@ jobs:
       matrix:
         config:
           {% for env in matrix_envs -%}
-          - environment: {{ env.name }}
-            account_id: {{ env.aws_account_id }}
+          - environment: j2{{ env.name }}
+            account_id: j2{{ env.aws_account_id }}
           {%- endfor %}
 
     uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.9.0
     with:
       environment: ${{ matrix.config.environment }}
-      aws_region: {{ aws_region }}
+      aws_region: j2{{ aws_region }}
       aws_role_name: cicd-iac
       aws_account_id: ${{ matrix.config.account_id }}
       docker_context: application
@@ -49,15 +49,15 @@ jobs:
       matrix:
         config:
           {% for env in matrix_envs -%}
-          - environment: {{ env.name }}
-            account_id: {{ env.aws_account_id }}
-            tf_deploy_override: {{ env.tf_deploy_override }}
+          - environment: j2{{ env.name }}
+            account_id: j2{{ env.aws_account_id }}
+            tf_deploy_override: j2{{ env.tf_deploy_override }}
           {%- endfor %}
 
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-deploy-basic.yaml@v0.8.0
     with:
       environment: ${{ matrix.config.environment }}
-      aws_region: {{ aws_region }}
+      aws_region: j2{{ aws_region }}
       aws_role_name: cicd-iac
       aws_account_id: ${{ matrix.config.account_id }}
       tf_dir: deploy/application

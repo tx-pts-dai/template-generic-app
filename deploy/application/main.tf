@@ -1,5 +1,5 @@
 locals {
-  application_name = "{{ application_name }}"
+  application_name = "j2{{ application_name }}"
   release_name     = var.environment == "prod" ? local.application_name : "${local.application_name}-${var.environment}"
   cluster_name     = data.aws_eks_cluster.cluster.id
   namespace        = data.terraform_remote_state.infra_local.outputs.k8s_namespace
