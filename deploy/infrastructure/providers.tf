@@ -21,7 +21,7 @@ terraform {
   }
 }
 
-{% if dns_provider == "cloudflare" %}
+{%- if dns_provider == "cloudflare" %}
 data "aws_secretsmanager_secret_version" "cloudflare_api_token" {
   secret_id = "tf_cloudflare_api_token" # follows naming of existing secret in Disco
 }
@@ -29,7 +29,7 @@ data "aws_secretsmanager_secret_version" "cloudflare_api_token" {
 provider "cloudflare" {
   api_token = data.aws_secretsmanager_secret_version.cloudflare_api_token.secret_string
 }
-{% endif %}
+{%- endif %}
 
 provider "aws" {
   region = "@{{ aws_region }}"
