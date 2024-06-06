@@ -1,7 +1,9 @@
 locals {
-  cluster_name = data.terraform_remote_state.infrastructure.outputs.cluster_name
-  namespace    = var.environment # must match the namespace in the ./deploy/application/main.tf 
+  namespace      = var.environment # must match the namespace in the ./deploy/application/main.tf 
   service_name = "@{{ application_name }}"
+  matching_index = [for idx, name in data.aws_ssm_parameters_by_path.platform.names : idx if can(regex("^.*/cluster_name$", name))] 
+  first_index    = element(local.matching_index, 0)
+  cluster_name   = element(data.aws_ssm_parameters_by_path.platform.values, local.first_index)
 }
 
 resource "aws_ecr_repository" "this" {
@@ -58,6 +60,7 @@ module "acm" {
   validation_method = "DNS"
 }
 
+
 {%- if dns_provider == "cloudflare" %}
 resource "cloudflare_record" "validation" {
   count = length(module.acm.distinct_domain_names)
@@ -72,3 +75,13 @@ resource "cloudflare_record" "validation" {
   allow_overwrite = true
 }
 {% endif %}
+
+data "aws_ssm_parameters_by_path" "platform" {
+  path = "/platform/" 
+  recursive = true
+}
+
+data "aws_eks_cluster" "eks_cluster" {
+  name = local.cluster_name
+}
+
