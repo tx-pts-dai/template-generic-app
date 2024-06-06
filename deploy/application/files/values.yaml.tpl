@@ -39,7 +39,3 @@ nodeSelector:
   "provisioner-group": ${provisioner_group}
   "kubernetes.io/arch": amd64
 
-tolerations:
-  - key: karpenter.sh/default
-    operator: Exists
-    effect: NoSchedule
