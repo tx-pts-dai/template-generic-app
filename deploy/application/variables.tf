@@ -37,3 +37,9 @@ variable "deployment_annotations" {
   type        = map(string)
   default     = {}
 }
+
+variable "node_selector_architecture" {
+  description = "Node selector architecture: arm64 or x86"
+  type        = string
+  default     = "arm64"
+}
