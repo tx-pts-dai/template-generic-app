@@ -2,8 +2,8 @@ terraform {
   required_version = "~> 1.7.0"
 
   backend "s3" {
-    key            = "<GITHUB_REPO>/infrastructure.tfstate"
-    region         = "<AWS_REGION>"
+    key            = "@{{ github_repo }}/infrastructure.tfstate"
+    region         = "@{{ aws_region }}"
     dynamodb_table = "terraform-lock"
   }
 
@@ -12,15 +12,27 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    {%- if dns_provider == "cloudflare" %}
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 4.22"
+      version = "~> 4.0"
     }
+    {%- endif %}
   }
 }
 
+{%- if dns_provider == "cloudflare" %}
+data "aws_secretsmanager_secret_version" "cloudflare_api_token" {
+  secret_id = "@{{ team }}/cloudflare/apiToken" # follows naming of existing secret in Disco
+}
+
+provider "cloudflare" {
+  api_token = data.aws_secretsmanager_secret_version.cloudflare_api_token.secret_string
+}
+{%- endif %}
+
 provider "aws" {
-  region = "<AWS_REGION>"
+  region = "@{{ aws_region }}"
 
   default_tags {
     tags = {
