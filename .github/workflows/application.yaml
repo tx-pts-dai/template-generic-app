@@ -28,43 +28,30 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config:
-          - environment: dev
-            account_id: <DEV_ACCOUNT_ID>
-          # - environment: prod
-          #   account_id: <PROD_ACCOUNT_ID>
-
+        stack: [app]
+        environment: [dev, int, prod]
     uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.9.0
     with:
-      environment: ${{ matrix.config.environment }}
-      aws_region: <AWS_REGION>
-      aws_role_name: cicd-iac
-      aws_account_id: ${{ matrix.config.account_id }}
-      docker_context: application
+      environment: ${{ matrix.stack }}-${{ matrix.environment }}
 
-  deploy_tf:
-    needs: [build]
+  plan:
+    if: github.event_name == 'pull_request'
     strategy:
       fail-fast: false
       matrix:
-        config:
-          - environment: dev
-            account_id: <DEV_ACCOUNT_ID>
-            tf_deploy_override: ${{ github.event_name == 'workflow_dispatch' && true || false }}
-          # - environment: prod
-          #   account_id: <PROD_ACCOUNT_ID>
-          #   tf_deploy_override: false
-
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-deploy-basic.yaml@v0.8.0
+        stack: [app]
+        environment: [dev, int, prod]
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.16.0
     with:
-      environment: ${{ matrix.config.environment }}
-      aws_region: <AWS_REGION>
-      aws_role_name: cicd-iac
-      aws_account_id: ${{ matrix.config.account_id }}
-      tf_dir: deploy/application
-      tf_version: 1.7.1
-      tf_deploy_override: ${{ matrix.config.tf_deploy_override }}
-      tf_state_bucket: tf-state-${{ matrix.config.account_id }}
-      tf_var_files: ./environments/${{ matrix.config.environment }}.tfvars
-      tf_vars: |
-        image_tag=${{ github.sha }}
+      environment: ${{ matrix.stack }}-${{ matrix.environment }}
+        
+  apply:
+    if: github.ref_name == github.event.repository.default_branch && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: [app]
+        environment: [dev, int, prod]
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.16.0
+    with:
+      environment: ${{ matrix.stack }}-${{ matrix.environment }}
