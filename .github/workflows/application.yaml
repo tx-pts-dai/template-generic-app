@@ -28,19 +28,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        stack: [app]
-        environment: <MATRIX>
+        - stack: [app]
+        {% for env in matrix_envs -%}
+        - environment: @{{ env.name }}
+        {% endfor %}
+
     uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.9.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
+      docker_context: application
 
   plan:
     if: github.event_name == 'pull_request'
     strategy:
       fail-fast: false
       matrix:
-        stack: [app]
-        environment: <MATRIX>
+        - stack: [app]
+        {% for env in matrix_envs -%}
+        - environment: @{{ env.name }}
+        {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.16.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
@@ -50,8 +56,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        stack: [app]
-        environment: [dev, int, prod]
+        - stack: [app]
+        {% for env in matrix_envs -%}
+        - environment: @{{ env.name }}
+        {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.16.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
