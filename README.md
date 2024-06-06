@@ -1,5 +1,9 @@
 # <APPLICATION_NAME>
 
+## Important
+This template is aimed to be used by external configuration tools such as Tam-cli as for now. It is not intended to be instanciated manually as many placeholders and environment variables are initialized or replaced during creation time. 
+
+## Introduction
 This template can be used for a single service or for a mono-repo (multi-service) setup. To convert it to a mono-repo:
 
 1. duplicate `application/` folder
