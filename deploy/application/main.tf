@@ -1,7 +1,7 @@
 locals {
   application_name = "<APPLICATION_NAME>"
   release_name     = var.environment == "prod" ? local.application_name : "${local.application_name}-${var.environment}"
-  cluster_name     = data.aws_eks_cluster.cluster.id
+  cluster_name     = data.aws_eks_cluster.eks_cluster.id
   namespace        = data.terraform_remote_state.infra_local.outputs.k8s_namespace
   image_repo       = data.terraform_remote_state.infra_local.outputs.ecr_repository_url
   iam_role_arn     = data.terraform_remote_state.infra_local.outputs.iam_eks_role_arn
