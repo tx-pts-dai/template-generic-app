@@ -28,9 +28,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        - stack: [app]
         {% for env in matrix_envs -%}
         - environment: @{{ env.name }}
+          stack: app
         {% endfor %}
 
     uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.9.0
@@ -43,9 +43,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        - stack: [app]
         {% for env in matrix_envs -%}
         - environment: @{{ env.name }}
+          stack: app
         {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.16.0
     with:
@@ -56,9 +56,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        - stack: [app]
         {% for env in matrix_envs -%}
         - environment: @{{ env.name }}
+          stack: app
         {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.16.0
     with:
