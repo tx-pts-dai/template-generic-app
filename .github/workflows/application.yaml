@@ -39,6 +39,7 @@ jobs:
       docker_context: application
 
   plan:
+    needs: [build]
     if: github.event_name == 'pull_request'
     strategy:
       fail-fast: false
