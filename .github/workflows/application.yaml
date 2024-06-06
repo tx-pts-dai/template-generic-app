@@ -29,7 +29,7 @@ jobs:
       fail-fast: false
       matrix:
         stack: [app]
-        environment: [dev, int, prod]
+        environment: <MATRIX>
     uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.9.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
@@ -40,7 +40,7 @@ jobs:
       fail-fast: false
       matrix:
         stack: [app]
-        environment: [dev, int, prod]
+        environment: <MATRIX>
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.16.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
