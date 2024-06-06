@@ -39,7 +39,7 @@ variable "deployment_annotations" {
 }
 
 variable "node_selector_architecture" {
-  description = "Node selector architecture: arm64 or x86"
+  description = "Node selector architecture: amd64 or x86"
   type        = string
-  default     = "arm64"
+  default     = "amd64"
 }
