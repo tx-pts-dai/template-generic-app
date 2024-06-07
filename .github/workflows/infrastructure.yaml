@@ -26,23 +26,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: 
-          {% for env in matrix_envs -%}
-          - @{{ env.name }}
-          {% endfor %}
+        {% for env in matrix_envs -%}
+        - environment: @{{ env.name }}
+          stack: app
+        {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.16.0
     with:
-      environment: ${{ matrix.environment }}
+      environment: ${{ matrix.stack }}-${{ matrix.environment }}
 
   apply:
     if: github.ref_name == github.event.repository.default_branch && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     strategy:
       fail-fast: false
       matrix:
-        environment:
-          {% for env in matrix_envs -%}
-          - @{{ env.name }}
-          {% endfor %}
+        {% for env in matrix_envs -%}
+        - environment: @{{ env.name }}
+          stack: app
+        {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.16.0
     with:
-      environment: ${{ matrix.environment }}
+      environment: ${{ matrix.stack }}-${{ matrix.environment }}

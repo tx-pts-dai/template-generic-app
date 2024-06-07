@@ -1,5 +1,9 @@
 # @{{ application_name }}
 
+## Important
+This template is aimed to be used by external configuration tools such as Tam-cli as for now. It is not intended to be instanciated manually as many placeholders and environment variables are initialized or replaced during creation time. 
+
+## Introduction
 This Jinja2 template can be used for a single service or for a mono-repo (multi-service) setup.
 
 It expects the following Jinja2 variables:
@@ -7,6 +11,7 @@ It expects the following Jinja2 variables:
 - `dns_provider` (accepts values "aws" or "cloudflare")
 
 To convert it to a mono-repo:
+
 
 1. duplicate `application/` folder
 1. duplicate `.github/workflows/application.yaml` file for enabling the CI

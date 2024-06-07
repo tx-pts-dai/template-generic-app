@@ -28,42 +28,39 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config:
-          {% for env in matrix_envs -%}
-          - environment: @{{ env.name }}
-            account_id: @{{ env.aws_account_id }}
-          {% endfor %}
+        {% for env in matrix_envs -%}
+        - environment: @{{ env.name }}
+          stack: app
+        {% endfor %}
 
     uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.9.0
     with:
-      environment: ${{ matrix.config.environment }}
-      aws_region: @{{ aws_region }}
-      aws_role_name: cicd-iac
-      aws_account_id: ${{ matrix.config.account_id }}
+      environment: ${{ matrix.stack }}-${{ matrix.environment }}
       docker_context: application
 
-  deploy_tf:
+  plan:
     needs: [build]
+    if: github.event_name == 'pull_request'
     strategy:
       fail-fast: false
       matrix:
-        config:
-          {% for env in matrix_envs -%}
-          - environment: @{{ env.name }}
-            account_id: @{{ env.aws_account_id }}
-            tf_deploy_override: @{{ env.tf_deploy_override }}
-          {% endfor %}
-
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-deploy-basic.yaml@v0.8.0
+        {% for env in matrix_envs -%}
+        - environment: @{{ env.name }}
+          stack: app
+        {% endfor %}
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.23.0
     with:
-      environment: ${{ matrix.config.environment }}
-      aws_region: @{{ aws_region }}
-      aws_role_name: cicd-iac
-      aws_account_id: ${{ matrix.config.account_id }}
-      tf_dir: deploy/application
-      tf_version: 1.7.1
-      tf_deploy_override: ${{ matrix.config.tf_deploy_override }}
-      tf_state_bucket: tf-state-${{ matrix.config.account_id }}
-      tf_var_files: ./environments/${{ matrix.config.environment }}.tfvars
-      tf_vars: |
-        image_tag=${{ github.sha }}
+      environment: ${{ matrix.stack }}-${{ matrix.environment }}
+        
+  apply:
+    if: github.ref_name == github.event.repository.default_branch && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    strategy:
+      fail-fast: false
+      matrix:
+        {% for env in matrix_envs -%}
+        - environment: @{{ env.name }}
+          stack: app
+        {% endfor %}
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.23.0
+    with:
+      environment: ${{ matrix.stack }}-${{ matrix.environment }}
