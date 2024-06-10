@@ -1,0 +1,29 @@
+# @{{ application_name }}
+
+@{{ application_name }} is deployed in the following environments:
+{% for e in matrix_envs %}
+- @{{ e["name"] }} -> @{{ e["hostname"] }}
+{%- endfor %}
+
+## Configuration (do right after creation)
+
+After you run it through Jinja rendering engine (or Tam CLI), then...
+
+1. (Platform team) Update the `infra-terraform` repository to include this repo as allowed to use OIDC
+1. Do a first CI run to create the infrastructure
+1. Do a second CI run to deploy the application
+
+## Folder structure
+
+- Application source code is stored in the [`application/`](./application/) folder
+- Code to perform deployments is stored in the [`deploy/`](./deploy/) folder. [`deploy/infrastructure/`](./deploy/infrastructure/) for ECR and IAM role. [`deploy/application/`](./deploy/application/) for the actual Terraform resources to deploy.
+
+## Deployment
+
+This project uses [GitHub Actions](https://docs.github.com/en/actions) to deploy the application and infrastructure. The workflow is defined in `.github/workflows/application.yaml` which uses a reusable workflow that is loaded from `https://github.com/tx-pts-dai/github-workflows`.
+
+## Notes
+
+{% if tam_cli_version %}
+_Initialized through Tam CLI @{{ tam_cli_version }}_
+{% endif %}

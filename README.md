@@ -1,49 +1,39 @@
-# @{{ application_name }}
+# Template Generic Application for Tamedia
 
-## Important
-This template is aimed to be used by external configuration tools such as Tam-cli as for now. It is not intended to be instanciated manually as many placeholders and environment variables are initialized or replaced during creation time. 
+This repo contains a Jinja template that can be used for a single service or for a mono-repo (multi-service) setup.
 
-## Introduction
-This Jinja2 template can be used for a single service or for a mono-repo (multi-service) setup.
+This is highly recommended to be used through [Tam CLI](https://github.com/DND-IT/tam-cli) command `tam repo create`.
 
-It expects the following Jinja2 variables:
+## Features
+
+- CI/CD workflows for build and deployment to K8s cluster
+- Infrastructure definition through Terraform
+- TLS certificate deployment and validation
+- Automatic DNS record creation (supports Route53 and CloudFlare)
+- Folder for application source code
+
+## How to use
+
+It expects the following Jinja variables:
 
 - `dns_provider` (accepts values "aws" or "cloudflare")
+- `application_name`
+- `matrix_envs` (list of objects for CI workflows)
+- `github_repo`
+- `provisioner_group`
+- `app_healthcheck_endpoint`
+- `aws_region`
 
-To convert it to a mono-repo:
-
-
-1. duplicate `application/` folder
-1. duplicate `.github/workflows/application.yaml` file for enabling the CI
-
-## Initialization
-
-To make this template functioning you have to first fill the blanks by replacing all the occurrences of:
-
-- `{{ application_name }}` with the app name
-- `{{ dev_account_id }}` and `{{ prod_account_id }}` with the respective AWS Account IDs
-- `{{ dev_hostname }}` and `{{ prod_hostname }}` with the respective DNS values
-- `{{ github_repo }}`
-- `{{ aws_region }}`
-
-Then double check the following inputs:
-
-- `var.terraform_remote_state_key` to point to the right file for your infra.
-- `var.provisioner_group` to use the right provisioner group based on the ones available.
-
-Then...
+After you run it through Jinja rendering engine (or Tam CLI), then...
 
 1. (Platform team) Update the `infra-terraform` repository to include this repo as allowed to use OIDC
-1. Do a first run to create the infrastructure
-1. Do a second run to deploy the application
-1. Profit (?)
+1. Do a first CI run to create the infrastructure
+1. Do a second CI run to deploy the application
 
 ## Folder structure
 
 - Application source code is stored in the [`application/`](./application/) folder
 - Code to perform deployments is stored in the [`deploy/`](./deploy/) folder. [deploy/infrastructure/](./deploy/infrastructure/) for ECR and IAM role. [deploy/application/](./deploy/application/) for the actual Terraform resources to deploy.
-
-A feature we offer is to allow to deploy the application with `helm install` only instead of using Terraform to do that for you.
 
 ## Deployment
 
@@ -51,15 +41,5 @@ This project uses [GitHub Actions](https://docs.github.com/en/actions) to deploy
 
 ## Future works for the Platform engineers
 
-1. Auto-configure (`AWS_REGION`, `AWS_ACCOUNT_ID`, precommit, clone the repo, ...) through cli tool (wip)
-1. Create ACM certificate automatically + DNS validation (module?) through CloudFlare or Route53 + injection into the service annotations
-1. Custom Python/NodeJS/Java templates. (Ask developers to provide good/standard ones? Include generation of GitIgnore too)
+1. Custom Python/NodeJS/Java templates. (Involve developers to provide good/standard ones? Include generation of GitIgnore too)
 1. Implement scripts for [Localstack](https://www.localstack.cloud/), [Kind](https://kind.sigs.k8s.io/) and [Act](https://github.com/nektos/act) to complete local dev experience
-
-## Requirements
-
-Foundational infrastructure must have:
-
-- external-dns
-- AWS Load Balancer controller
-- ... (growing list) ...
