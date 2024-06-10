@@ -37,9 +37,5 @@ ingress:
 
 nodeSelector:
   "provisioner-group": ${provisioner_group}
-  "kubernetes.io/arch": amd64
+  "kubernetes.io/arch": ${node_selector_architecture}
 
-tolerations:
-  - key: karpenter.sh/default
-    operator: Exists
-    effect: NoSchedule

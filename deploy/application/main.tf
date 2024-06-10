@@ -22,15 +22,16 @@ resource "helm_release" "this" {
 
   values = [
     templatefile("${path.module}/files/values.yaml.tpl", {
-      aws_iam_role_arn       = local.iam_role_arn
-      cluster_name           = local.cluster_name
-      image_repo             = local.image_repo
-      image_tag              = var.image_tag
-      service_name           = local.application_name
-      hostname               = var.hostname
-      provisioner_group      = var.provisioner_group
-      deployment_annotations = var.deployment_annotations
-      env_vars               = {}
+      aws_iam_role_arn           = local.iam_role_arn
+      cluster_name               = local.cluster_name
+      image_repo                 = local.image_repo
+      image_tag                  = var.image_tag
+      service_name               = local.application_name
+      hostname                   = var.hostname
+      provisioner_group          = var.provisioner_group
+      node_selector_architecture = var.node_selector_architecture
+      deployment_annotations     = var.deployment_annotations
+      env_vars                   = {}
     })
   ]
 }
