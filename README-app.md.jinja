@@ -2,8 +2,8 @@
 
 @{{ application_name }} is deployed in the following environments:
 
-{% for e in matrix_envs %}
-- e["name"] -> e["hostname"]
+{%- for e in matrix_envs %}
+- @{{ e["name"] }} -> @{{ e["hostname"] }}
 {% endfor %}
 
 ## Configuration (do right after creation)
