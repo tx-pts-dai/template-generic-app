@@ -47,16 +47,16 @@ provider "aws" {
   }
 }
 
-data "aws_eks_cluster" "cluster" { # Needed for vpc ID to get public subnets
-  name = data.terraform_remote_state.infra_remote.outputs.eks.cluster_name
-}
-
 data "aws_caller_identity" "current" {}
+
+data "aws_route53_zone" "zone" {
+  name = var.zone_name
+}
 
 data "terraform_remote_state" "infra_remote" {
   backend = "s3"
   config = {
     bucket = "tf-state-${data.aws_caller_identity.current.account_id}"
-    key    = var.terraform_remote_state_key
+    key    = "@{{ infra_repo }}/platform/terraform.tfstate"
   }
 }

@@ -17,7 +17,7 @@ This is highly recommended to be used through [Tam CLI](https://github.com/DND-I
 It expects the following Jinja variables:
 
 - `dns_provider` (accepts values "aws" or "cloudflare")
-- `application_name`
+- `app_name`
 - `matrix_envs` (list of objects for CI workflows)
 - `github_repo`
 - `app_healthcheck_endpoint`

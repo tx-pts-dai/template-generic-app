@@ -23,7 +23,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  docker_build_push_ecr:
+  build_push:
     strategy:
       fail-fast: true
       matrix:
@@ -31,16 +31,14 @@ jobs:
         - environment: @{{ env.name }}
           stack: app
         {% endfor %}
-
     uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.23.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
-      docker_push: ${{ github.ref_name == github.event.repository.default_branch || github.event_name == 'pull_request' }}
       docker_context: application
-      image_tag: ${{ github.sha }}
 
   plan:
     if: github.event_name == 'pull_request'
+    needs: build_push
     strategy:
       fail-fast: false
       matrix:
@@ -51,9 +49,12 @@ jobs:
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.23.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
+      tf_vars: |
+        image_tag="${{ github.sha }}"
         
   apply:
     if: github.ref_name == github.event.repository.default_branch && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    needs: build_push
     strategy:
       fail-fast: false
       matrix:
@@ -66,4 +67,3 @@ jobs:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
       tf_vars: |
         image_tag="${{ github.sha }}"
-    needs: docker_build_push_ecr
