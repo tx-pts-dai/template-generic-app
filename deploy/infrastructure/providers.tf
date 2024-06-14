@@ -1,10 +1,13 @@
+locals {
+  region = "@{{ aws_region }}"
+}
+
 terraform {
   required_version = "~> 1.7.0"
 
   backend "s3" {
-    key            = "@{{ github_repo }}/infrastructure.tfstate"
-    region         = "@{{ aws_region }}"
     dynamodb_table = "terraform-lock"
+    encrypt        = true
   }
 
   required_providers {
@@ -32,16 +35,28 @@ provider "cloudflare" {
 {%- endif %}
 
 provider "aws" {
-  region = "@{{ aws_region }}"
+  region = local.region
 
   default_tags {
     tags = {
-      "Terraform"   = "true"
-      "Environment" = var.environment
-      "Repository"  = var.github_repo
+      Terraform   = "true"
+      Environment = var.environment
+      GithubRepo  = var.github_repo
+      GithubOrg   = var.github_org
     }
   }
 }
 
+data "aws_eks_cluster" "cluster" { # Needed for vpc ID to get public subnets
+  name = data.terraform_remote_state.infra_remote.outputs.eks.cluster_name
+}
+
 data "aws_caller_identity" "current" {}
 
+data "terraform_remote_state" "infra_remote" {
+  backend = "s3"
+  config = {
+    bucket = "tf-state-${data.aws_caller_identity.current.account_id}"
+    key    = var.terraform_remote_state_key
+  }
+}

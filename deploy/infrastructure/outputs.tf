@@ -12,3 +12,8 @@ output "k8s_namespace" {
   description = "Kubernetes namespace where the IRSA account can be run"
   value       = local.namespace
 }
+
+output "app_url" {
+  description = "URL of the application"
+  value       = local.app_url
+}

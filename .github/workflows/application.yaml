@@ -15,7 +15,6 @@ on:
       - "deploy/application/**"
       - ".github/workflows/application.yaml"
 
-  # TODO: test it
   workflow_dispatch:
 
 permissions:
@@ -24,22 +23,23 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
+  docker_build_push_ecr:
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         {% for env in matrix_envs -%}
         - environment: @{{ env.name }}
           stack: app
         {% endfor %}
 
-    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.9.0
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.23.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
+      docker_push: ${{ github.ref_name == github.event.repository.default_branch || github.event_name == 'pull_request' }}
       docker_context: application
+      image_tag: ${{ github.sha }}
 
   plan:
-    needs: [build]
     if: github.event_name == 'pull_request'
     strategy:
       fail-fast: false
@@ -64,3 +64,6 @@ jobs:
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.23.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
+      tf_vars: |
+        image_tag="${{ github.sha }}"
+    needs: docker_build_push_ecr
