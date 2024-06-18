@@ -1,4 +1,4 @@
-name: Terraform Infrastructure
+name: Infrastructure
 
 on:
   push:
@@ -26,25 +26,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        account:
+        accounts:
           {% for env in matrix_envs -%}
           - environment: @{{ env.name }}
             stack: infra
           {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.24.0
     with:
-      environment: ${{ matrix.account.stack }}-${{ matrix.account.environment }}
+      environment: ${{ matrix.accounts.stack }}-${{ matrix.accounts.environment }}
 
   apply:
     if: github.ref_name == github.event.repository.default_branch && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     strategy:
       fail-fast: false
       matrix:
-        account:
+        accounts:
           {% for env in matrix_envs -%}
           - environment: @{{ env.name }}
             stack: infra
           {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.24.0
     with:
-      environment: ${{ matrix.account.stack }}-${{ matrix.account.environment }}
+      environment: ${{ matrix.accounts.stack }}-${{ matrix.accounts.environment }}

@@ -1,6 +1,6 @@
-# @{{ application_name }}
+# @{{ app_name }}
 
-@{{ application_name }} is deployed in the following environments:
+@{{ app_name }} is deployed in the following environments:
 {% for e in matrix_envs %}
 - @{{ e["name"] }} -> @{{ e["hostname"] }}
 {%- endfor %}

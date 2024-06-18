@@ -3,15 +3,9 @@ variable "environment" {
   type        = string
 }
 
-variable "hostname" {
-  description = "DNS name where to host the application"
-  type        = string
-}
-
 variable "image_tag" {
   description = "The tag of the image to deploy"
   type        = string
-  default     = "latest"
 }
 
 variable "github_repo" {
@@ -20,26 +14,14 @@ variable "github_repo" {
   default     = "@{{ github_repo }}"
 }
 
-variable "provisioner_group" {
-  description = "Name of the provisioner group to use"
+variable "github_org" {
+  description = "Git organization name"
   type        = string
-  default     = "@{{ provisioner_group }}"
-}
-
-variable "terraform_remote_state_key" {
-  description = "Path to the Terraform state file of the upstream infrastructure. Needed until we have a standard path across all AWS accounts."
-  type        = string
-  default     = "infrastructure/terraform.tfstate"
+  default     = "dnd-it"
 }
 
 variable "deployment_annotations" {
   description = "Annotations to add to the Kubernetes Deployment"
   type        = map(string)
   default     = {}
-}
-
-variable "node_selector_architecture" {
-  description = "Node selector architecture"
-  type        = string
-  default     = "amd64"
 }

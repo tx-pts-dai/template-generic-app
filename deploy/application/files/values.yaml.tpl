@@ -1,11 +1,8 @@
-# https://github.com/DND-IT/app-helm-chart/blob/4.1.0/values.yaml
+# https://github.com/DND-IT/helm-charts/blob/app-0.1.2/charts/app/values.yaml
 
 aws_iam_role_arn: ${aws_iam_role_arn}
 image_repo: ${image_repo}
 image_tag: ${image_tag}
-
-service:
-  name: ${service_name}
 
 port: 8080
 
@@ -34,8 +31,9 @@ ingress:
     external-dns.alpha.kubernetes.io/hostname: ${hostname}
   hosts: 
     - ${hostname}
+  paths:
+    - /
 
 nodeSelector:
-  "provisioner-group": ${provisioner_group}
-  "kubernetes.io/arch": ${node_selector_architecture}
-
+  "karpenter.sh/nodepool": default
+  "kubernetes.io/arch": amd64
