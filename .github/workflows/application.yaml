@@ -27,14 +27,14 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        accounts:
+        deployments:
           {% for env in matrix_envs -%}
           - environment: @{{ env.name }}
             stack: app
           {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.23.0
     with:
-      environment: ${{ matrix.accounts.stack }}-${{ matrix.accounts.environment }}
+      environment: ${{ matrix.deployments.stack }}-${{ matrix.deployments.environment }}
       docker_context: application
 
   plan:
@@ -43,14 +43,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        accounts:
+        deployments:
           {% for env in matrix_envs -%}
           - environment: @{{ env.name }}
             stack: app
           {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.23.0
     with:
-      environment: ${{ matrix.accounts.stack }}-${{ matrix.accounts.environment }}
+      environment: ${{ matrix.deployments.stack }}-${{ matrix.deployments.environment }}
       tf_vars: |
         image_tag="${{ github.sha }}"
         
@@ -60,13 +60,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        accounts:
+        deployments:
           {% for env in matrix_envs -%}
           - environment: @{{ env.name }}
             stack: app
           {% endfor %}
     uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.23.0
     with:
-      environment: ${{ matrix.accounts.stack }}-${{ matrix.accounts.environment }}
+      environment: ${{ matrix.deployments.stack }}-${{ matrix.deployments.environment }}
       tf_vars: |
         image_tag="${{ github.sha }}"
