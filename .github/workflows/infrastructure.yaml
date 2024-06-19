@@ -26,11 +26,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        {% for env in matrix_envs -%}
-        - environment: @{{ env.name }}
-          stack: app
-        {% endfor %}
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.23.0
+        stack: [infra]
+        environment:
+          {% for env in matrix_envs -%}
+          - @{{ env.name }}
+          {% endfor %}
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.24.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
 
@@ -39,10 +40,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        {% for env in matrix_envs -%}
-        - environment: @{{ env.name }}
-          stack: app
-        {% endfor %}
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.23.0
+        stack: [infra]
+        environment:
+          {% for env in matrix_envs -%}
+          - @{{ env.name }}
+          {% endfor %}
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.24.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
