@@ -7,7 +7,7 @@ variable "app_name" {
 variable "app_subdomain" {
   description = "The subdomain of the application. This can be empty if the application host is the root domain."
   type        = string
-  default     = "@{{ app_subdomain }}"
+  default     = null
 }
 
 variable "environment" {

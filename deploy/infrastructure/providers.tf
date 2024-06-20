@@ -49,10 +49,6 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-data "aws_route53_zone" "zone" {
-  name = var.zone_name
-}
-
 data "terraform_remote_state" "infra_remote" {
   backend = "s3"
   config = {
