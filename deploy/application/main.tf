@@ -9,8 +9,8 @@ locals {
 resource "helm_release" "app" {
   name             = local.app_name
   repository       = "https://dnd-it.github.io/helm-charts"
-  chart            = "app"
-  version          = "0.1.2"
+  chart            = "webapp"
+  version          = "0.2.1"
   namespace        = local.namespace
   create_namespace = true
   atomic           = true
