@@ -2,7 +2,7 @@
 
 @{{ app_name }} is deployed in the following environments:
 {% for e in matrix_envs %}
-- @{{ e["name"] }} -> @{{ e["hostname"] }}
+- @{{ e["name"] }} -> @{{ e["app_subdomain"].e["zone_name"] }}
 {%- endfor %}
 
 ## Configuration (do right after creation)

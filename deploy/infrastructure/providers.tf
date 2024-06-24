@@ -49,14 +49,10 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-data "aws_route53_zone" "zone" {
-  name = var.zone_name
-}
-
 data "terraform_remote_state" "infra_remote" {
   backend = "s3"
   config = {
-    bucket = "tf-state-${data.aws_caller_identity.current.account_id}"
-    key    = "@{{ infra_repo }}/platform/terraform.tfstate"
+    bucket = "@{{ tf_state_bucket }}"
+    key    = "@{{ infra_tf_state_key }}"
   }
 }
