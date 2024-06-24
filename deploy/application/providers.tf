@@ -57,15 +57,15 @@ data "aws_caller_identity" "current" {}
 data "terraform_remote_state" "infra_remote" {
   backend = "s3"
   config = {
-    bucket = "@{{ infra_terraform_state_bucket }}"
-    key    = "@{{ infra_terraform_state_key }}"
+    bucket = "@{{ tf_state_bucket }}"
+    key    = "@{{ infra_tf_state_key }}"
   }
 }
 
 data "terraform_remote_state" "infra_local" {
   backend = "s3"
   config = {
-    bucket = "@{{ infra_terraform_state_bucket }}"
+    bucket = "@{{ tf_state_bucket }}"
     key    = "${var.github_repo}/infrastructure/terraform.tfstate" # Must match what's defined in the .tfbackend files
   }
 }

@@ -20,7 +20,8 @@ It expects the following Jinja variables:
 - `app_name`
 - `matrix_envs` (list of objects for CI workflows)
 - `github_repo`
-- `infra_repo`
+- `tf_state_bucket`
+- `infra_tf_state_key`
 - `app_healthcheck_endpoint`
 - `aws_region`
 
