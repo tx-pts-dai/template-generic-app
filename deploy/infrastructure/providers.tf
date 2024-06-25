@@ -52,7 +52,7 @@ data "aws_caller_identity" "current" {}
 data "terraform_remote_state" "infra_remote" {
   backend = "s3"
   config = {
-    bucket = "@{{ tf_state_bucket }}"
-    key    = "@{{ infra_tf_state_key }}"
+    bucket = var.tf_state_bucket
+    key    = var.infra_tf_state_key
   }
 }
