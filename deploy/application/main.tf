@@ -7,7 +7,7 @@ locals {
 }
 
 resource "helm_release" "app" {
-  name             = local.app_name
+  name             = trim(substr(local.app_name, 0, 53), "-")
   repository       = "https://dnd-it.github.io/helm-charts"
   chart            = "webapp"
   version          = "0.2.1"
