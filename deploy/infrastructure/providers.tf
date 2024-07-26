@@ -26,7 +26,7 @@ terraform {
 
 {%- if dns_provider == "cloudflare" %}
 data "aws_secretsmanager_secret_version" "cloudflare_api_token" {
-  secret_id = "@{{ team }}/cloudflare/apiToken" # follows naming of existing secret in Disco
+  secret_id = "dai/cloudflare/apiToken"
 }
 
 provider "cloudflare" {
