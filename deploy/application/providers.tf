@@ -52,8 +52,6 @@ data "aws_eks_cluster" "cluster" {
   name = data.terraform_remote_state.infra_remote.outputs.eks.cluster_name
 }
 
-data "aws_caller_identity" "current" {}
-
 data "terraform_remote_state" "infra_remote" {
   backend = "s3"
   config = {
