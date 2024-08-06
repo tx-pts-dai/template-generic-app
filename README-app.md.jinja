@@ -5,22 +5,30 @@
 - @{{ e["name"] }} -> @{{ e["app_subdomain"] }}.@{{ e["zone_name"] }}
 {%- endfor %}
 
-## Configuration (do right after creation)
-
-After you run it through Jinja rendering engine (or Tam CLI), then...
-
-1. (Platform team) Update the `infra-terraform` repository to include this repo as allowed to use OIDC
-1. Do a first CI run to create the infrastructure
-1. Do a second CI run to deploy the application
-
 ## Folder structure
 
 - Application source code is stored in the [`application/`](./application/) folder
-- Code to perform deployments is stored in the [`deploy/`](./deploy/) folder. [`deploy/infrastructure/`](./deploy/infrastructure/) for ECR and IAM role. [`deploy/application/`](./deploy/application/) for the actual Terraform resources to deploy.
+- Terraform code to perform deployments is stored in the [`deploy/`](./deploy/) folder. 
+    - [`deploy/infrastructure/`](./deploy/infrastructure/) for ECR and IAM role (and possible app-related infrastructure). 
+    - [`deploy/application/`](./deploy/application/) for Helm release that will deploy new versions of your application.
 
 ## Deployment
 
-This project uses [GitHub Actions](https://docs.github.com/en/actions) to deploy the application and infrastructure. The workflow is defined in `.github/workflows/application.yaml` which uses a reusable workflow that is loaded from `https://github.com/tx-pts-dai/github-workflows`.
+This project uses [GitHub Actions](https://docs.github.com/en/actions) to deploy the application and infrastructure. 
+
+The workflow is defined in [`.github/workflows/application.yaml`](.github/workflows/application.yaml) which uses a reusable workflow that is loaded from `https://github.com/tx-pts-dai/github-workflows`.
+
+All the environments are deployed sequentially when pushing to the main branch. Please modify the workflows following examples like [ai-tools](https://github.com/DND-IT/discovery-ai-tools) or [fuw-factsheets](https://github.com/DND-IT/fuw-factsheets).
+
+## Testing
+
+### Infrastructure
+
+Testing infrastructure changes is performed on each feature branch.
+
+### Application
+
+Manual deployment to staging environments can be performed in Github through "Actions" -> "Application" -> "Run workflow" button. Example [ai-tools](https://github.com/DND-IT/discovery-ai-tools/actions/workflows/application.yaml)
 
 ## Notes
 
