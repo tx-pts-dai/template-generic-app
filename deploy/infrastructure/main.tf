@@ -3,15 +3,19 @@ locals {
 
   app_name = var.app_name
   app_url = join(".", compact([
+    {%- if app_url_type == "subdomain" %}
     var.app_subdomain,
+    {%- endif %}
     {%- if dns_provider == "aws" %}
     data.aws_route53_zone.this.name
     {%- elif dns_provider == "cloudflare" %}
     data.cloudflare_zone.this.name
     {%- endif %}
   ]))
-  namespace       = var.app_name # must match the namespace in the ./deploy/application/main.tf 
-  service_account = var.app_name
+  namespace         = var.app_name # must match the namespace in the ./deploy/application/main.tf 
+  service_account   = var.app_name
+  target_group_name = "${var.app_name}-${local.cluster_name}"
+  target_group_arn  = try(data.terraform_remote_state.infra_shared_remote.outputs.alb_target_groups[local.target_group_name].arn, "")
 }
 
 resource "aws_ecr_repository" "this" {
@@ -49,6 +53,7 @@ data "cloudflare_zone" "this" {
 }
 {% endif %}
 
+{% if app_url_type == "subdomain" %}
 # Certificate is picked automatically by the ALB Controller through auto-discovery
 module "acm" {
   source  = "terraform-aws-modules/acm/aws"
@@ -65,9 +70,9 @@ module "acm" {
 
   validation_method = "DNS"
 }
+{% endif %}
 
-
-{%- if dns_provider == "cloudflare" %}
+{%- if dns_provider == "cloudflare" and app_url_type == "subdomain" %}
 resource "cloudflare_record" "validation" {
   count = length(module.acm.distinct_domain_names)
 

@@ -21,18 +21,27 @@ env:
   ${key}: ${value}
 %{ endfor ~}
 
+targetGroupBinding:
+  enabled: ${enable_target_group_binding}
+  targetGroupARN: ${target_group_arn}
+
+{%- if app_url_type == "subdomain" %}
+%{ if enable_ingress ~}
 ingress:
   className: alb
   annotations:
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
-    alb.ingress.kubernetes.io/target-type: ip
-    external-dns.alpha.kubernetes.io/hostname: ${hostname}
+  alb.ingress.kubernetes.io/scheme: internet-facing
+  alb.ingress.kubernetes.io/target-type: ip
+  alb.ingress.kubernetes.io/group.name: ${service_name}
+  alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80,"HTTPS":443}]'
+  alb.ingress.kubernetes.io/ssl-redirect: '443'
+  alb.ingress.kubernetes.io/healthcheck-path: @{{ app_healthcheck_endpoint }}
   hosts: 
     - ${hostname}
   paths:
     - /
+%{ endif ~}
+{%- endif %}
 
 nodeSelector:
   "karpenter.sh/nodepool": default
