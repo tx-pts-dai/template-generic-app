@@ -2,16 +2,16 @@ locals {
   cluster_name = data.terraform_remote_state.infra_remote.outputs.eks.cluster_name
 
   app_name = var.app_name
+  {%- if app_url_type == "subdomain" %}
   app_url = join(".", compact([
-    {%- if app_url_type == "subdomain" %}
     var.app_subdomain,
-    {%- endif %}
     {%- if dns_provider == "aws" %}
     data.aws_route53_zone.this.name
     {%- elif dns_provider == "cloudflare" %}
     data.cloudflare_zone.this.name
     {%- endif %}
   ]))
+  {%- endif %}
   namespace         = var.app_name # must match the namespace in the ./deploy/application/main.tf 
   service_account   = var.app_name
   target_group_name = "${var.app_name}-${local.cluster_name}"

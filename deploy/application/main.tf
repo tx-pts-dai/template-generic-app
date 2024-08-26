@@ -28,7 +28,9 @@ resource "helm_release" "app" {
       cluster_name                = local.cluster_name
       image_repo                  = local.image_repo
       image_tag                   = var.image_tag
+      {%- if app_url_type == "subdomain" %}
       hostname                    = data.terraform_remote_state.infra_local.outputs.app_url
+      {%- endif %}
       deployment_annotations      = var.deployment_annotations
       env_vars                    = {}
       enable_target_group_binding = var.enable_target_group_binding

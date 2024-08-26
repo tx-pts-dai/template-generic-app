@@ -4,11 +4,13 @@ variable "app_name" {
   default     = "@{{ app_name }}"
 }
 
+{%- if app_url_type == "subdomain" %}
 variable "app_subdomain" {
   description = "The subdomain of the application. This can be empty if the application host is the root domain."
   type        = string
   default     = "@{{ app_subdomain }}"
 }
+{%- endif %}
 
 variable "environment" {
   description = "value of the environment tag"
