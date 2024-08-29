@@ -1,8 +1,8 @@
 locals {
   cluster_name = data.terraform_remote_state.infra_remote.outputs.eks.cluster_name
 
-  app_name        = var.app_name
-  app_url         = join(".", compact([
+  app_name = var.app_name
+  app_url = join(".", compact([
     var.app_subdomain,
     {%- if dns_provider == "aws" %}
     data.aws_route53_zone.this.name
