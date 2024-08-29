@@ -56,10 +56,10 @@ module "acm" {
 
   domain_name = local.app_url
 
-  {%- if dns_provider == "aws" %}
+  {% if dns_provider == "aws" %}
   zone_id = data.aws_route53_zone.this.zone_id
 
-  {%- elif dns_provider == "cloudflare" %}
+  {% elif dns_provider == "cloudflare" %}
   create_route53_records  = false
   validation_record_fqdns = cloudflare_record.validation[*].hostname
   {%- endif %}
