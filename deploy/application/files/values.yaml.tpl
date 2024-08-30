@@ -37,6 +37,7 @@ ingress:
   alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80,"HTTPS":443}]'
   alb.ingress.kubernetes.io/ssl-redirect: '443'
   alb.ingress.kubernetes.io/healthcheck-path: @{{ app_healthcheck_endpoint }}
+  alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
   hosts: 
     - ${hostname}
   paths:
