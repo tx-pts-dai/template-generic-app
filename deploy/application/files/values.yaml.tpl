@@ -21,12 +21,13 @@ env:
   ${key}: ${value}
 %{ endfor ~}
 
+{%- if app_url_type == "path" %}
 targetGroupBinding:
   enabled: ${enable_target_group_binding}
   targetGroupARN: ${target_group_arn}
+{%- endif %}
 
 {%- if app_url_type == "subdomain" %}
-%{ if enable_ingress ~}
 ingress:
   className: alb
   annotations:
@@ -40,7 +41,6 @@ ingress:
     - ${hostname}
   paths:
     - /
-%{ endif ~}
 {%- endif %}
 
 nodeSelector:
