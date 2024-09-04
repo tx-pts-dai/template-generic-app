@@ -29,7 +29,7 @@ variable "deployment_annotations" {
 variable "enable_target_group_binding" {
   description = "Enable binding to target group"
   type        = bool
-  default     = {% if app_url_type == "subdomain" %} false {% else %} true {% endif %}
+  default     = {% if app_url_type == "subdomain" %}false{% else %}true{% endif %}
 }
 
 variable "tf_state_bucket" {
