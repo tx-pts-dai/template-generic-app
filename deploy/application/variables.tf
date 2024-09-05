@@ -26,6 +26,12 @@ variable "deployment_annotations" {
   default     = {}
 }
 
+variable "enable_target_group_binding" {
+  description = "Enable binding to target group"
+  type        = bool
+  default     = {% if app_url_type == "subdomain" %}false{% else %}true{% endif %}
+}
+
 variable "tf_state_bucket" {
   description = "The name of the S3 bucket where Terraform states are stored"
   type        = string

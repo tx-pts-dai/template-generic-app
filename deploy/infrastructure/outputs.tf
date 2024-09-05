@@ -13,7 +13,9 @@ output "k8s_namespace" {
   value       = local.namespace
 }
 
+{%- if app_url_type == "subdomain" %}
 output "app_url" {
   description = "URL of the application"
   value       = local.app_url
 }
+{%- endif %}
