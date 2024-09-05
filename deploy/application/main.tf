@@ -5,7 +5,6 @@ locals {
   image_repo   = data.terraform_remote_state.infra_local.outputs.ecr_repository_url
   iam_role_arn = data.terraform_remote_state.infra_local.outputs.iam_eks_role_arn
   app_url      = data.terraform_remote_state.infra_local.outputs.app_url
-  
 {% if app_url_type == "path" %}
   target_group_name = "${var.app_name}-${local.cluster_name}"
   target_group_arn  = try(data.terraform_remote_state.infra_shared_remote.outputs.alb_target_groups[local.target_group_name].arn, "")
