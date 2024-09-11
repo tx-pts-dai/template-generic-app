@@ -29,10 +29,10 @@ jobs:
       matrix:
         stack: [app]
         environment:
-          {% for env in matrix_envs -%}
+          {%- for env in matrix_envs %}
           - @{{ env.name }}
-          {% endfor %}
-    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.23.0
+          {%- endfor %}
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v1
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
       docker_context: application
@@ -45,27 +45,28 @@ jobs:
       matrix:
         stack: [app]
         environment:
-          {% for env in matrix_envs -%}
+          {%- for env in matrix_envs %}
           - @{{ env.name }}
-          {% endfor %}
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.23.0
+          {%- endfor %}
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v1
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
       tf_vars: |
         image_tag="${{ github.sha }}"
-        
+
   apply:
     if: github.ref_name == github.event.repository.default_branch && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     needs: build_push
     strategy:
-      fail-fast: false
+      fail-fast: true
+      max-parallel: 1
       matrix:
         stack: [app]
         environment:
-          {% for env in matrix_envs -%}
+          {%- for env in matrix_envs %}
           - @{{ env.name }}
-          {% endfor %}
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.23.0
+          {%- endfor %}
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v1
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
       tf_vars: |

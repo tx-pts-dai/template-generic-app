@@ -3,6 +3,12 @@ variable "environment" {
   type        = string
 }
 
+variable "app_name" {
+  description = "Name of the application"
+  type        = string
+  default     = "@{{ app_name }}"
+}
+
 variable "image_tag" {
   description = "The tag of the image to deploy"
   type        = string
@@ -26,10 +32,28 @@ variable "deployment_annotations" {
   default     = {}
 }
 
+variable "external_secrets" {
+  description = "List of external secrets to fetch"
+  type        = list(string)
+  default     = []
+}
+
+variable "scaling_enabled" {
+  description = "Enable scaling (HPA) of the deployment"
+  type        = bool
+  default     = false
+}
+
 variable "enable_target_group_binding" {
   description = "Enable binding to target group"
   type        = bool
   default     = {% if app_url_type == "subdomain" %}false{% else %}true{% endif %}
+}
+
+variable "namespace" {
+  description = "Kubernetes namespace to deploy the application into"
+  type        = string
+  default     = null
 }
 
 variable "tf_state_bucket" {
