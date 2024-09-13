@@ -29,7 +29,7 @@ resource "aws_ecr_repository" "this" {
 }
 
 resource "aws_iam_policy" "get_all_secrets" {
-  name        = "GetAllSecretsPolicy"
+  name        = "GetAllSecretsPolicy-${local.app_name}"
   description = "Policy to allow getting all secrets from AWS Secrets Manager"
 
   policy = jsonencode({
