@@ -3,7 +3,7 @@ locals {
 
   {%- if app_url_type == "subdomain" %}
 
-  app_url = join(".", compact([var.app_subdomain, {% if dns_provider == "aws" %}data.aws_route53_zone.this.name{% elif dns_provider == "cloudflare" %}data.cloudflare_zone.this.name{% endif %}]))
+  app_url = join(".", compact([var.app_subdomain, var.zone_name]))
   {%- endif %}
 
   namespace       = var.app_name # must match the namespace in the ./deploy/application/main.tf
