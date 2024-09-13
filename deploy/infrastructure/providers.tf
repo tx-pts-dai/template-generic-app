@@ -47,10 +47,4 @@ provider "aws" {
   }
 }
 
-data "terraform_remote_state" "infra_remote" {
-  backend = "s3"
-  config = {
-    bucket = var.tf_state_bucket
-    key    = var.infra_tf_state_key
-  }
-}
+data "aws_caller_identity" "current" {}

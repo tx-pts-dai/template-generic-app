@@ -34,6 +34,11 @@ provider "aws" {
   }
 }
 
+locals {
+  stack        = module.platform_ssm.stacks[0]
+  cluster_name = module.platform_ssm.lookup[local.stack].cluster_name
+}
+
 provider "helm" {
   kubernetes {
     host                   = data.aws_eks_cluster.cluster.endpoint
@@ -49,10 +54,10 @@ provider "helm" {
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = data.terraform_remote_state.infra_remote.outputs.eks.cluster_name
+  name = local.cluster_name
 }
 
-data "terraform_remote_state" "infra_remote" {
+data "terraform_remote_state" "infra_local" {
   backend = "s3"
   config = {
     bucket = var.tf_state_bucket
@@ -60,10 +65,13 @@ data "terraform_remote_state" "infra_remote" {
   }
 }
 
-data "terraform_remote_state" "infra_local" {
-  backend = "s3"
-  config = {
-    bucket = var.tf_state_bucket
-    key    = "${var.github_repo}/infrastructure/terraform.tfstate" # Must match what's defined in the .tfbackend files
-  }
+module "platform_ssm" {
+  source  = "tx-pts-dai/kubernetes-platform/aws//modules/ssm"
+  version = "0.7.0"
+
+  base_prefix       = "infrastructure"
+  stack_type        = "platform"
+  stack_name_prefix = ""
+
+  lookup = ["cluster_name"]
 }

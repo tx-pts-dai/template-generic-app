@@ -1,7 +1,6 @@
-environment        = "@{{ env_name }}"
+environment = "@{{ env_name }}"
+zone_name   = "@{{ zone_name }}"
+
 {%- if app_url_type == "subdomain" %}
-app_subdomain      = "@{{ app_subdomain }}"
+app_subdomain = "@{{ app_subdomain }}"
 {%- endif %}
-zone_name          = "@{{ zone_name }}"
-tf_state_bucket    = "@{{ bucket_name }}"
-infra_tf_state_key = "@{{ infra_tf_state_key }}"
