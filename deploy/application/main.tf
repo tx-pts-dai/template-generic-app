@@ -38,6 +38,7 @@ resource "helm_release" "app" {
       scaling_enabled        = var.scaling_enabled
       {%- if app_url_type == "subdomain" %}
       hostname               = data.terraform_remote_state.infra_local.outputs.app_url
+      service_name           = var.app_name
       {%- endif %}
       deployment_annotations = var.deployment_annotations
       env_vars               = {}
