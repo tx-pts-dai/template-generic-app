@@ -60,8 +60,3 @@ variable "tf_state_bucket" {
   description = "The name of the S3 bucket where Terraform states are stored"
   type        = string
 }
-
-variable "infra_tf_state_key" {
-  description = "The key of the Terraform state file for the infrastructure"
-  type        = string
-}

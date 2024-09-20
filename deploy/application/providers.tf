@@ -61,7 +61,7 @@ data "terraform_remote_state" "infra_local" {
   backend = "s3"
   config = {
     bucket = var.tf_state_bucket
-    key    = var.infra_tf_state_key
+    key    = "@{{ infra_tf_state_key }}"
   }
 }
 
