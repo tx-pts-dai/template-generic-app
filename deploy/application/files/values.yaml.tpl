@@ -34,7 +34,7 @@ externalSecrets:
      - ${secret}
     %{ endfor ~}
 
-{%- if app_url_type == "path" %}
+{% if app_url_type == "path" %}
 targetGroupBinding:
   enabled: ${enable_target_group_binding}
   targetGroupARN: ${target_group_arn}
