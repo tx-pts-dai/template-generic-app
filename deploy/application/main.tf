@@ -1,6 +1,9 @@
 locals {
   iam_role_arn = data.terraform_remote_state.infra_local.outputs.iam_eks_role_arn
-  app_url      = data.terraform_remote_state.infra_local.outputs.app_url
+  {%- if app_url_type == "subdomain" %}
+
+  app_url = data.terraform_remote_state.infra_local.outputs.app_url
+  {%- endif %}
 }
 
 data "aws_ecr_repository" "this" {
@@ -38,7 +41,7 @@ resource "helm_release" "app" {
       scaling_enabled        = var.scaling_enabled
       {%- if app_url_type == "subdomain" %}
       hostname               = data.terraform_remote_state.infra_local.outputs.app_url
-      alb_group_name           = var.app_name
+      alb_group_name         = var.app_name
       {%- endif %}
       deployment_annotations = var.deployment_annotations
       env_vars               = {}
