@@ -6,6 +6,13 @@ image_tag: ${image_tag}
 
 port: 8080
 
+scale:
+  enabled: ${scaling_enabled}
+  minReplicas: 3 # Minimum number of replicas, applied only if scaling is enabled
+  maxReplicas: 20
+  minAvailable: 60%
+  cpuThresholdPercentage: 80
+
 metadata:
   deploymentAnnotations:
     %{ for key, value in deployment_annotations ~}
@@ -20,6 +27,12 @@ env:
 %{ for key, value in env_vars ~}
   ${key}: ${value}
 %{ endfor ~}
+
+externalSecrets:
+  secretNames:
+    %{ for secret in external_secrets ~}
+     - ${secret}
+    %{ endfor ~}
 
 {%- if app_url_type == "path" %}
 targetGroupBinding:
