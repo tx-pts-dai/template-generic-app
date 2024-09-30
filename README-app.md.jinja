@@ -2,7 +2,7 @@
 
 @{{ app_name }} is deployed in the following environments:
 {% for e in matrix_envs %}
-- @{{ e["name"] }} -> @{{ e["app_subdomain"] }}.@{{ e["zone_name"] }}
+- @{{ e["name"] }} -> `{% if app_url_type == "subdomain" %}@{{ e["app_subdomain"] }}.{% endif %}@{{ e["zone_name"] }}{% if app_url_type == "path" %}/<your-app-path>{% endif %}`
 {%- endfor %}
 
 ## Folder structure
