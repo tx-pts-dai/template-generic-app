@@ -1,4 +1,4 @@
-# https://github.com/DND-IT/helm-charts/blob/app-0.1.2/charts/app/values.yaml
+# https://github.com/DND-IT/helm-charts/blob/main/charts/webapp/values.yaml
 
 aws_iam_role_arn: ${aws_iam_role_arn}
 image_repo: ${image_repo}
