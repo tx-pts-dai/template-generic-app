@@ -4,7 +4,8 @@ aws_iam_role_arn: ${aws_iam_role_arn}
 image_repo: ${image_repo}
 image_tag: ${image_tag}
 
-port: 8080
+service:
+  targetPort: 8080 # Port on which the application is exposed to
 
 scale:
   enabled: ${scaling_enabled}
