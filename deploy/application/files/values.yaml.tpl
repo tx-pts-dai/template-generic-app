@@ -5,7 +5,7 @@ image_repo: ${image_repo}
 image_tag: ${image_tag}
 
 service:
-  targetPort: 8080 # Port on which the application is exposed to
+  targetPort: 8080 # Port on which the application is exposed on the pod
 
 scale:
   enabled: ${scaling_enabled}
